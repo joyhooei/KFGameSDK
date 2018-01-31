@@ -83,7 +83,7 @@ public class NormalLoginView extends BaseLinearLayout {
 			}
 		});
 		edt_password.setTypeface(Typeface.DEFAULT);
-		accountLogin = (SdkTipsTextView) findViewById(ResourceUtil.getId("accountLogin"));
+		accountLogin = (SdkTipsTextView) findViewById(ResourceUtil.getId("tv_account_login"));
 		accountLogin.setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
@@ -105,11 +105,11 @@ public class NormalLoginView extends BaseLinearLayout {
 			}
 		});
 		// 注册一个
-		findViewById(findId("btnLoginViewRegister")).setOnClickListener(new BaseOnClickListener() {
+		findViewById(findId("ll_account_register")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-				Toast.makeText(KFGameSDK.getInstance().getActivity(),"accountLogin onBaseClick",Toast.LENGTH_SHORT).show();
 				startView(RegisterView.createView(getContext()));
+				Toast.makeText(KFGameSDK.getInstance().getActivity(),"account_register onBaseClick",Toast.LENGTH_SHORT).show();
 			}
 		});
 		// 忘记密码
@@ -117,13 +117,14 @@ public class NormalLoginView extends BaseLinearLayout {
 		findViewById(findId("btnLoginViewForgetPw")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-//				startView(ForgetPasswdView.createView(getContext()));
+				startView(ForgetPasswdView.createView(getContext()));
 			}
 		});
 		// 游客试玩
 		findViewById(findId("btnQuickLogin")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
+				Toast.makeText(KFGameSDK.getInstance().getActivity(),"游客试玩",Toast.LENGTH_SHORT).show();
 //				requestApi(SdkHttpRequest.quickLoginRequest());
 			}
 		});
@@ -248,5 +249,10 @@ public class NormalLoginView extends BaseLinearLayout {
 	@Override
 	public boolean isMenuEnable() {
 		return true;
+	}
+
+	@Override
+	public String getViewTitle() {
+		return "账号登陆";
 	}
 }

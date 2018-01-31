@@ -178,7 +178,7 @@ public class RegisterView extends BaseLinearLayout {
 
 	@Override
 	public String getViewTitle() {
-		return getContext().getString(ResourceUtil.getStringId("vsgm_reg_account"));
+		return "账号注册";
 	}
 
 

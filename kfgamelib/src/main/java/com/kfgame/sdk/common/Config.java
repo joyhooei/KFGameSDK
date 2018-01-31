@@ -9,6 +9,6 @@ import android.content.Context;
 public class Config {
 
 //    public native static String SDKConfig(Context context, String[] params);
-
+    public static String sdkTitle = "KFGame";
 
 }

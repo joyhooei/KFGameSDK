@@ -20,7 +20,9 @@ import android.widget.TextView;
 
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.view.NormalLoginView;
+import com.kfgame.sdk.view.SdkSettingView;
 import com.kfgame.sdk.view.circularprogress.CircularProgressBar;
+import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
 import com.kfgame.sdk.view.viewinterface.BaseSdkView;
 
 /**
@@ -36,6 +38,7 @@ public class AccountDialog extends Dialog {
     private RelativeLayout containerView;
     private View progressView;
     private ImageView iv_account_back;
+    private ImageView menuImage;
     private TextView tv_title;
     private boolean isProgressLoading;
     private ViewType type;
@@ -65,8 +68,20 @@ public class AccountDialog extends Dialog {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         iv_account_back = (ImageView) rootView.findViewById(ResourceUtil.getId("iv_account_back"));
+        iv_account_back.setOnClickListener(new BaseOnClickListener() {
+            @Override
+            public void onBaseClick(View v) {
+                onBackPressed();
+            }
+        });
+        menuImage = (ImageView) findViewById(ResourceUtil.getId("iv_login_top_menu"));
+        menuImage.setOnClickListener(new BaseOnClickListener() {
+            @Override
+            public void onBaseClick(View v) {
+                SdkDialogViewManager.doAddView(SdkSettingView.createView(getContext()));
+            }
+        });
         tv_title = (TextView) rootView.findViewById(ResourceUtil.getId("kfgame_tv_title"));
-        tv_title.setText("登陆");
 
         progressView = findViewById(ResourceUtil.getId("progress_view"));
 
@@ -156,16 +171,16 @@ public class AccountDialog extends Dialog {
     public void updateView(BaseSdkView v) {
         updateViewTitle(v.getViewTitle());
         updateViewBack(v.interceptOnBackEvent());
-//        updateViewMenu(v.isMenuEnable());
+        updateViewMenu(v.isMenuEnable());
     }
 
-//    private void updateViewMenu(boolean isMenuEnable) {
-//        if (isMenuEnable) {
-//            menuImage.setVisibility(View.VISIBLE);
-//        } else {
-//            menuImage.setVisibility(View.GONE);
-//        }
-//    }
+    private void updateViewMenu(boolean isMenuEnable) {
+        if (isMenuEnable) {
+            menuImage.setVisibility(View.VISIBLE);
+        } else {
+            menuImage.setVisibility(View.GONE);
+        }
+    }
 
     private void updateViewBack(boolean intercept) {
         if (intercept) {
@@ -176,14 +191,14 @@ public class AccountDialog extends Dialog {
     }
 
     private void updateViewTitle(String title) {
-//        if (title == null) {
-//            viewTitle.setVisibility(View.GONE);
+        if (title == null) {
+            tv_title.setVisibility(View.GONE);
 //            logoImage.setVisibility(View.VISIBLE);
-//        } else {
-//            viewTitle.setText(title);
-//            viewTitle.setVisibility(View.VISIBLE);
+        } else {
+            tv_title.setText(title);
+            tv_title.setVisibility(View.VISIBLE);
 //            logoImage.setVisibility(View.GONE);
-//        }
+        }
     }
 
     @Override

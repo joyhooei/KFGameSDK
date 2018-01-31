@@ -27,9 +27,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import static com.gamater.dialog.SdkDialogViewManager.hideLoadingView;
-//import static com.gamater.dialog.SdkDialogViewManager.showLoadingView;
-
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 

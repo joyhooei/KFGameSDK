@@ -12,7 +12,7 @@
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="15dp" >
+        android:paddingTop="10dp" >
 
         <com.kfgame.sdk.view.WarningLinearLayout
             android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="textPassword"
                 android:paddingLeft="12dp"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
                 android:textSize="16dp" />
@@ -145,7 +145,7 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="同意<u>用户协议</u>"
+                android:text="同意用户协议"
                 android:textColor="@android:color/black"
                 android:textSize="15dp" />
         </LinearLayout>

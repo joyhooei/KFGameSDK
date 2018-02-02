@@ -29,10 +29,10 @@
                 android:layout_height="36dp"
                 android:background="#A0808080"
                 android:padding="5dp"
-                android:src="@drawable/vsgm_tony_icon_account" />
+                android:src="@drawable/kfgame_icon_account" />
 
             <EditText
-                android:id="@+id/account_edit"
+                android:id="@+id/edt_phone_account"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:background="@android:color/transparent"
@@ -66,10 +66,10 @@
                     android:layout_height="36dp"
                     android:background="#A0808080"
                     android:padding="5dp"
-                    android:src="@drawable/vsgm_tony_icon_passwd" />
+                    android:src="@drawable/kfgame_icon_password" />
 
                 <EditText
-                    android:id="@+id/passwd_edit"
+                    android:id="@+id/edt_password"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:background="@android:color/transparent"
@@ -92,7 +92,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="2dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/vsgm_tony_selector_btn_fgp"
+                android:background="@drawable/kfgame_selector_iv_forget_password"
                 android:visibility="gone" />
         </RelativeLayout>
 

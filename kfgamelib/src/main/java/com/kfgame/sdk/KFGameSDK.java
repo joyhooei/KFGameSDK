@@ -1,15 +1,11 @@
 package com.kfgame.sdk;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.widget.Toast;
 
 import com.kfgame.sdk.callback.SDKLoginListener;
-import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.dialog.AccountDialog;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
@@ -17,7 +13,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.cookie.CookieJarImpl;
-import com.lzy.okgo.cookie.store.DBCookieStore;
+import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
@@ -25,12 +21,6 @@ import com.lzy.okgo.model.HttpParams;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.X509TrustManager;
-import javax.security.cert.CertificateException;
-import javax.security.cert.X509Certificate;
 
 import okhttp3.OkHttpClient;
 
@@ -43,13 +33,11 @@ public class KFGameSDK {
 //    static {
 //        System.loadLibrary("native-lib");
 //    }
-
+    private SDKLoginListener sdkLoginListener;
 
     private Activity activity;
     private Context context;
     private Application application;
-
-    private SDKLoginListener sdkLoginListener;
 
     private static KFGameSDK ourInstance  = null;
 
@@ -74,6 +62,14 @@ public class KFGameSDK {
         return ourInstance;
     }
 
+    public SDKLoginListener getSDKLoginListener() {
+        return sdkLoginListener;
+    }
+
+    public void setGamaterSDKListener(SDKLoginListener sdkLoginListener) {
+        this.sdkLoginListener = sdkLoginListener;
+    }
+
     public void initSDK(Activity activity){
         this.activity = activity;
         ResourceUtil.init(activity);
@@ -85,11 +81,18 @@ public class KFGameSDK {
         initOkGo();
     }
 
-    public void sdkLogin() {
-        if (activity.isFinishing())
+    public void sdkLogin(SDKLoginListener sdkLoginListener) {
+        setGamaterSDKListener(sdkLoginListener);
+
+        if (activity.isFinishing()) {
+            getSDKLoginListener().onLoginError();
             return;
+        }
 
         LogUtil.d("Tobin sdkLogin");
+        if(isFastClick())
+            return;
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -115,19 +118,28 @@ public class KFGameSDK {
         Toast.makeText(activity, "SDK.initSDK必须在主Activity的onCreate中调用",Toast.LENGTH_LONG).show();
     }
 
-    public SDKLoginListener getSDKLoginListener() {
-        return sdkLoginListener;
-    }
-
-    public void setGamaterSDKListener(SDKLoginListener sdkLoginListener) {
-        this.sdkLoginListener = sdkLoginListener;
+    /**
+     * 防止控件被重复点击
+     */
+    private static long lastClickTime;
+    public synchronized static boolean isFastClick() {
+        long time = System.currentTimeMillis();
+        if ( time - lastClickTime < 1500) {
+            return true;
+        }
+        lastClickTime = time;
+        return false;
     }
 
     private void initOkGo() {
+        if (application == null){
+            LogUtil.e("KFGame", "必须在Application中初始化");
+            return;
+        }
         //---------这里给出的是示例代码,告诉你可以这么传,实际使用的时候,根据需要传,不需要就不传-------------//
         HttpHeaders headers = new HttpHeaders();
-        headers.put("imei", "commonHeaderValue1");    //header不支持中文，不允许有特殊字符
-        headers.put("androidId", "commonHeaderValue2");
+        headers.put("imei", "imei");    //header不支持中文，不允许有特殊字符
+        headers.put("androidId", "androidId");
         HttpParams params = new HttpParams();
         params.put("platform", "android");     //param支持中文,直接传,不要自己编码
         //----------------------------------------------------------------------------------------//
@@ -147,9 +159,9 @@ public class KFGameSDK {
         builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);   //全局的连接超时时间
 
         //自动管理cookie（或者叫session的保持），以下几种任选其一就行
-        //builder.cookieJar(new CookieJarImpl(new SPCookieStore(this)));            //使用sp保持cookie，如果cookie不过期，则一直有效
-        builder.cookieJar(new CookieJarImpl(new DBCookieStore(getContext())));              //使用数据库保持cookie，如果cookie不过期，则一直有效
-        //builder.cookieJar(new CookieJarImpl(new MemoryCookieStore()));            //使用内存保持cookie，app退出后，cookie消失
+        builder.cookieJar(new CookieJarImpl(new SPCookieStore(application)));   //使用sp保持cookie，如果cookie不过期，则一直有效
+//        builder.cookieJar(new CookieJarImpl(new DBCookieStore(application)));   //使用数据库保持cookie，如果cookie不过期，则一直有效
+        //builder.cookieJar(new CookieJarImpl(new MemoryCookieStore()));          //使用内存保持cookie，app退出后，cookie消失
 
         //https相关设置，以下几种方案根据需要自己设置
         //方法一：信任所有证书,不安全有风险
@@ -164,9 +176,6 @@ public class KFGameSDK {
         //配置https的域名匹配规则，详细看demo的初始化介绍，不需要就不要加入，使用不当会导致https握手失败
 //        builder.hostnameVerifier(new SafeHostnameVerifier());
 
-        if (application == null){
-            LogUtil.e("KFGame", "必须在Application中初始化");
-        }
         // 其他统一的配置
         // 详细说明看GitHub文档：https://github.com/jeasonlzy/
         OkGo.getInstance().init(application)                    //必须调用初始化

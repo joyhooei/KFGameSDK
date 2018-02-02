@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kfgame.sdk.view.RegisterView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.kfgame.sdk.view.PhoneRegisterView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -28,22 +28,22 @@
                 android:layout_height="36dp"
                 android:background="#A0808080"
                 android:padding="5dp"
-                android:src="@drawable/vsgm_tony_icon_account" />
+                android:src="@drawable/kfgame_icon_account" />
 
             <EditText
-                android:id="@+id/account_edit"
+                android:id="@+id/edt_phone_account"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:hint="Input your account"
+                android:hint="请输入手机号码"
                 android:imeOptions="flagNoExtractUi"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
                 android:paddingLeft="12dp"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
         </com.kfgame.sdk.view.WarningLinearLayout>
 
         <com.kfgame.sdk.view.WarningLinearLayout
@@ -60,22 +60,22 @@
                 android:layout_height="36dp"
                 android:background="#A0808080"
                 android:padding="5dp"
-                android:src="@drawable/vsgm_tony_icon_passwd" />
+                android:src="@drawable/kfgame_icon_password" />
 
             <EditText
-                android:id="@+id/passwd_edit"
+                android:id="@+id/edt_password"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:hint="Please Input Password"
+                android:hint="请输入密码"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="textPassword"
                 android:paddingLeft="12dp"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
         </com.kfgame.sdk.view.WarningLinearLayout>
 
         <com.kfgame.sdk.view.WarningLinearLayout
@@ -92,34 +92,38 @@
                 android:layout_height="36dp"
                 android:background="#A0808080"
                 android:padding="5dp"
-                android:src="@drawable/vsgm_tony_icon_passwd" />
+                android:src="@drawable/kfgame_icon_password" />
 
             <EditText
-                android:id="@+id/commit_passwd_edit"
+                android:id="@+id/edt_identifying_code"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:hint="输入验证码"
+                android:hint="请输入验证码"
                 android:imeOptions="flagNoExtractUi"
-                android:inputType="textPassword"
+                android:inputType="number"
                 android:paddingLeft="12dp"
                 android:maxLines="1"
                 android:layout_weight="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
-                android:textSize="16dp" />
+                android:textSize="14dp" />
 
             <TextView
-                android:id="@+id/edt_send_identifying_code"
-                android:layout_width="60dp"
-                android:layout_height="36dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:hint="发送验证码"
+                android:id="@+id/tv_send_identifying_code"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/kfgame_yanzhenma_color_round"
+                android:layout_marginRight="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:hint="获取验证码"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
-                android:textSize="12dp" />
+                android:textSize="10dp" />
         </com.kfgame.sdk.view.WarningLinearLayout>
 
         <LinearLayout
@@ -132,7 +136,7 @@
             android:orientation="horizontal" >
 
             <CheckBox
-                android:id="@+id/policy_checkbox"
+                android:id="@+id/chk_policy"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@drawable/vsgm_tony_selector_checkbox_left"
@@ -140,7 +144,7 @@
                 android:checked="true" />
 
             <TextView
-                android:id="@+id/txtAgreement"
+                android:id="@+id/tx_agreement_policy"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginLeft="8dp"
@@ -164,4 +168,4 @@
             android:textSize="16dp" />
     </com.kfgame.sdk.view.BaseSdkBgLinearLayout>
 
-</com.kfgame.sdk.view.RegisterView>
+</com.kfgame.sdk.view.PhoneRegisterView>

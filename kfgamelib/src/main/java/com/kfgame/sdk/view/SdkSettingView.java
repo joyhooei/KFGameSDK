@@ -54,7 +54,7 @@ public class SdkSettingView extends BaseLinearLayout {
 				new BaseOnClickListener() {
 					@Override
 					public void onBaseClick(View v) {
-						startView(ForgetPasswdView.createView(getContext()));
+						startView(ForgetPasswordView.createView(getContext()));
 					}
 				});
 	}

@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kfgame.sdk.KFGameSDK;
+import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.pojo.KFGameUser;
+import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
 
@@ -44,7 +46,7 @@ public class NormalLoginView extends BaseLinearLayout {
 	private SdkTipsTextView accountLogin;
 	@Override
 	public void initView() {
-		edt_account = (EditText) findViewById(findId("account_edit"));
+		edt_account = (EditText) findViewById(findId("edt_phone_account"));
 		edt_account.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View view, boolean hasFocus) {
@@ -72,7 +74,7 @@ public class NormalLoginView extends BaseLinearLayout {
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		edt_password = (EditText) findViewById(findId("passwd_edit"));
+		edt_password = (EditText) findViewById(findId("edt_password"));
 		edt_password.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -100,6 +102,8 @@ public class NormalLoginView extends BaseLinearLayout {
 				if (!checkPasswd(passwd)) {
 					return;
 				}
+
+                AccountRequest.getInstance().requestTestString();
 				// 发送登录请求
 //				requestApi(SdkHttpRequest.normalLoginRequest(email, passwd));
 			}
@@ -108,7 +112,7 @@ public class NormalLoginView extends BaseLinearLayout {
 		findViewById(findId("ll_account_register")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-				startView(RegisterView.createView(getContext()));
+				startView(PhoneRegisterView.createView(getContext()));
 				Toast.makeText(KFGameSDK.getInstance().getActivity(),"account_register onBaseClick",Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -117,7 +121,7 @@ public class NormalLoginView extends BaseLinearLayout {
 		findViewById(findId("btnLoginViewForgetPw")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-				startView(ForgetPasswdView.createView(getContext()));
+				startView(ForgetPasswordView.createView(getContext()));
 			}
 		});
 		// 游客试玩
@@ -199,52 +203,6 @@ public class NormalLoginView extends BaseLinearLayout {
 	public boolean interceptOnBackEvent() {
 		return true;
 	}
-
-//	@Override
-//	public void requestDidSuccess(HttpRequest httpRequest, String result) {
-//		super.requestDidSuccess(httpRequest, result);
-//		String funcation = httpRequest.getFuncation();
-//		if (funcation.equals(APIs.WEB_API_THIRD_LOGIN))
-//			return;
-//		try {
-//			JSONObject obj = new JSONObject(result);
-//			KFGameUser user = new KFGameUser(result);
-//			if (user.getStatus() == 1) {
-//				String email = edt_account.getText().toString().trim();
-//				JSONObject data = obj.getJSONObject("data");
-//				if (!funcation.equals(APIs.WEB_API_FREE_LOGIN) && email.length() > 0) {
-//					data.put("email", email);
-//					user.setEmail(email);
-//				}
-//				obj.put("data", data);
-//				MobUserManager mobUserManager = MobUserManager.getInstance();
-//				mobUserManager.saveAccount(user.getUserid(), obj.toString());
-//				mobUserManager.setCurrentUser(user);
-////				OnLineHelper.getInstance(getContext()).start();
-////				GamaterSDK.getInstance().resumeGmae(null);
-////				GamaterSDK.getInstance().showNoticeDialog();
-//				mobUserManager.setIsLoginIng(false);
-//				loginSuccessCallback(user, funcation.equals(APIs.WEB_API_FREE_LOGIN) ? 1 : 2, null);
-//				getHandler().postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						SdkDialogViewManager.dialogDismiss();
-//					}
-//				}, 300);
-//			} else if (obj.optInt("errorCode") == 102) {
-//				passwdErrorCount = passwdErrorCount + 1;
-//				if (passwdErrorCount > 1) {
-//					findViewById(findId("btnLoginViewForgetPw")).setVisibility(View.VISIBLE);
-//				}
-//			} else if (canQuickLogin) {
-//				canQuickLogin = false;
-//				edt_password.setText("");
-//				showError(edt_password, edt_password.getHint().toString());
-//			}
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	@Override
 	public boolean isMenuEnable() {

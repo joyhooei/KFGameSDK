@@ -44,7 +44,7 @@ public class AccountDialog extends Dialog {
     private ViewType type;
 
     public AccountDialog(@NonNull Context context, ViewType type) {
-        super(context, getStyleId((Activity) context,"kfgame_sdk_dialog_bg"));
+        super(context, getStyleId((Activity) context,"kfgame_account_dialog_theme"));
         this.activity = (Activity) context;this.type = type;
         this.type = type;
     }
@@ -57,7 +57,7 @@ public class AccountDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SdkDialogViewManager.getManager().init(this);
-        rootView =(RelativeLayout)  getLayoutInflater().inflate(getLayoutId("kfgame_layout_account_base"), null);
+        rootView =(RelativeLayout)  getLayoutInflater().inflate(getLayoutId("kfgame_sdk_layout_account_base"), null);
         setContentView(rootView);
         containerView = (RelativeLayout) rootView.findViewById(ResourceUtil.getId("container_view"));
 

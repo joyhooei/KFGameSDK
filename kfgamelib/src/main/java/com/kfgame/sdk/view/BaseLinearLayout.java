@@ -1,10 +1,7 @@
 package com.kfgame.sdk.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
-import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -16,7 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.pojo.KFGameUser;
 import com.kfgame.sdk.util.ResourceUtil;
@@ -27,7 +23,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 
 	public BaseLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -128,10 +123,6 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		}
 	}
 
-	protected void showToast(int stringId) {
-		Toast.makeText(getContext(), stringId, Toast.LENGTH_SHORT).show();
-	}
-
 	protected void showToast(String str) {
 		Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
 	}
@@ -162,6 +153,20 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		return flag;
 	}
 
+	public boolean checkPhone(String phone) {
+		boolean flag = false;
+		try {
+			String check = "^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9])\\d{8}$";
+//			String chec2 = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+			Pattern regex = Pattern.compile(check);
+			Matcher matcher = regex.matcher(phone);
+			flag = matcher.matches();
+		} catch (Exception e) {
+			flag = false;
+		}
+		return flag;
+	}
+
 	protected static int findLayoutId(String layoutName) {
 		return ResourceUtil.getLayoutId(layoutName);
 	}
@@ -174,17 +179,12 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		return ResourceUtil.getStringId(stringName);
 	}
 
-	protected static int findDrawableId(String drawableName) {
-		return ResourceUtil.getDrawableId(drawableName);
-	}
-
 //	protected void requestApi(HttpRequest request) {
 //		if (request == null)
 //			return;
 //		request.setHttpEventListener(this);
 //		request.asyncStart();
 //	}
-
 
 	@Override
 	public boolean isMenuEnable() {
@@ -200,7 +200,6 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		showError(eRes);
 		makeEditTextWarning(et);
 	}
-
 
 	private static void setLoginToday(Context ctx) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -220,9 +219,9 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		if (!isLoginToday(getContext())) {
 //			SDKMenuManager.getInstance(null).updateMenuViewLoginToday();
 		}
-		if (KFGameSDK.getInstance().getSDKLoginListener() != null && user != null) {
-			KFGameSDK.getInstance().getSDKLoginListener().didLoginSuccess(user);
-		}
+//		if (KFGameSDK.getInstance().getSDKLoginListener() != null && user != null) {
+//			KFGameSDK.getInstance().getSDKLoginListener().onLoginSuccess(user);
+//		}
 		setLoginToday(getContext());
 	}
 }

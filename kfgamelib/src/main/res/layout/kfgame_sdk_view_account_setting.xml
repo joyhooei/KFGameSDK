@@ -74,14 +74,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/change_passwd"
+            android:id="@+id/change_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@drawable/kfgame_selector_white_round_border"
             android:orientation="horizontal"
             android:paddingLeft="24dp"
-            android:visibility="invisible" >
+            android:visibility="invisible">
 
             <TextView
                 android:layout_width="0dp"
@@ -102,7 +102,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/forget_passwd"
+            android:id="@+id/modify_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/kfgame_selector_white_round_border"

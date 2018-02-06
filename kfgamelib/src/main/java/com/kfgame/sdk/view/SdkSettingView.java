@@ -33,7 +33,7 @@ public class SdkSettingView extends BaseLinearLayout {
 				new BaseOnClickListener() {
 					@Override
 					public void onBaseClick(View v) {
-//						startView(ThirdLoginView.createView(getContext()));
+						startView(ThirdLoginView.createView(getContext()));
 					}
 				});
 		findViewById(ResourceUtil.getId("update_account")).setOnClickListener(
@@ -43,14 +43,14 @@ public class SdkSettingView extends BaseLinearLayout {
 //						startView(UpdateAccountView.createView(getContext()));
 					}
 				});
-		findViewById(ResourceUtil.getId("change_passwd")).setOnClickListener(
+		findViewById(ResourceUtil.getId("change_password")).setOnClickListener(
 				new BaseOnClickListener() {
 					@Override
 					public void onBaseClick(View v) {
 //						startView(ChangePasswdView.createView(getContext()));
 					}
 				});
-		findViewById(ResourceUtil.getId("forget_passwd")).setOnClickListener(
+		findViewById(ResourceUtil.getId("modify_password")).setOnClickListener(
 				new BaseOnClickListener() {
 					@Override
 					public void onBaseClick(View v) {

@@ -10,6 +10,8 @@ public class Config {
     public static String API_VERSION = "1.0.0";
     public static String sdkTitle = "KFGameSDK";
     public static String SDK_VERSION = "1.0.0";
+    // 0 test、 2 pre 、 其它正式
+    public static int isTestMode = 1;
 
     public static String CHANNEL_ID = "1";
     public static String APP_ID = "1";

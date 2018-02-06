@@ -13,8 +13,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.pojo.KFGameUser;
+import com.kfgame.sdk.pojo.ThirdType;
+import com.kfgame.sdk.util.NetCheckUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.view.viewinterface.BaseSdkView;
 
@@ -74,10 +77,7 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 	public boolean doViewGoBack() {
 		if (getChildCount() > 1) {
 			View view = getChildAt(getChildCount() - 1);
-			if (view instanceof BaseSdkView) {
-				return ((BaseSdkView) view).doViewGoBack();
-			}
-			return false;
+            return view instanceof BaseSdkView && ((BaseSdkView) view).doViewGoBack();
 		}
 		return false;
 	}
@@ -141,7 +141,7 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 	}
 
 	public boolean checkEmail(String email) {
-		boolean flag = false;
+		boolean flag;
 		try {
 			String check = ".*@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 			Pattern regex = Pattern.compile(check);
@@ -154,10 +154,9 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 	}
 
 	public boolean checkPhone(String phone) {
-		boolean flag = false;
+		boolean flag;
 		try {
 			String check = "^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9])\\d{8}$";
-//			String chec2 = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 			Pattern regex = Pattern.compile(check);
 			Matcher matcher = regex.matcher(phone);
 			flag = matcher.matches();
@@ -199,6 +198,29 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 	public void showError(EditText et, int eRes) {
 		showError(eRes);
 		makeEditTextWarning(et);
+	}
+
+	protected void thirdLogin(ThirdType type) {
+		if (NetCheckUtil.isNetworkStatus(getContext())) {
+			if (type == ThirdType.QQ) {
+                Toast.makeText(KFGameSDK.getInstance().getActivity(),"QQ登陆",Toast.LENGTH_SHORT).show();
+
+			} else if (type == ThirdType.wechat) {
+                Toast.makeText(KFGameSDK.getInstance().getActivity(),"微信登陆",Toast.LENGTH_SHORT).show();
+
+			} else if (type == ThirdType.weibo) {
+                Toast.makeText(KFGameSDK.getInstance().getActivity(),"微博登陆",Toast.LENGTH_SHORT).show();
+
+			} else if (type == ThirdType.alipay) {
+                Toast.makeText(KFGameSDK.getInstance().getActivity(),"淘宝登陆",Toast.LENGTH_SHORT).show();
+
+			} else if (type == ThirdType.baidu) {
+                Toast.makeText(KFGameSDK.getInstance().getActivity(),"百度登陆",Toast.LENGTH_SHORT).show();
+
+			}
+		} else {
+			showError("网络错误");
+		}
 	}
 
 	private static void setLoginToday(Context ctx) {

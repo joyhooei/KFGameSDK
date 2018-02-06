@@ -5,7 +5,9 @@ package com.kfgame.sdk.util;
  */
 
 public class SPUtil {
+    public static final String DATA_SAVE_NAME = "KFGameSdkData";
 
+    public static final String CONFIG_LOGIN_SETTINGS = "LOGIN_TYPE";
 
 
 }

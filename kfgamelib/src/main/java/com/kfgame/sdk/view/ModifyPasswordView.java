@@ -1,0 +1,112 @@
+package com.kfgame.sdk.view;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.kfgame.sdk.KFGameSDK;
+import com.kfgame.sdk.util.ResourceUtil;
+import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
+
+public class ModifyPasswordView extends BaseLinearLayout {
+
+	public ModifyPasswordView() {
+		super(KFGameSDK.getInstance().getActivity());
+	}
+
+	public ModifyPasswordView(Context context, AttributeSet attrs, int defStyleAttr) {
+		super(context, attrs, defStyleAttr);
+	}
+
+	public ModifyPasswordView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public ModifyPasswordView(Context context) {
+		super(context);
+	}
+
+	private EditText edt_account;
+	private EditText passwordEdit;
+	private TextView edt_send_identifying_code;
+
+	@Override
+	public void initView() {
+//		TextView mesText = (TextView) findViewById(ResourceUtil.getId("text_mes"));
+//		mesText.setText("小贴士：输入正确的手机号码，并查看手机短信验证码");
+		edt_account = (EditText) findViewById(ResourceUtil.getId("edt_phone_account"));
+        edt_account.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                String str = edt_account.getText().toString().trim();
+                if (isShown() && !hasFocus) {
+                    checkAccount(str);
+                }
+            }
+        });
+
+		final TextView btnForgetPw = (TextView) findViewById(ResourceUtil.getId("btn_forget_password"));
+		btnForgetPw.setOnClickListener(new BaseOnClickListener() {
+			@Override
+			public void onBaseClick(View v) {
+				String account = edt_account.getText().toString().trim();
+				if (account == null || account.length() == 0) {
+					showError(edt_account, edt_account.getHint().toString());
+					return;
+				} else if (!checkEmail(account)) {
+					showError(edt_account, findStringId("okgame_email_format_error"));
+					return;
+				}
+
+
+				hideSoftInput();
+//				requestApi(SdkHttpRequest.forgetPasswd(account));
+			}
+		});
+
+		passwordEdit = (EditText) findViewById(ResourceUtil.getId("edt_account_password"));
+
+
+
+
+		edt_send_identifying_code =(TextView) findViewById(ResourceUtil.getId("edt_send_identifying_code"));
+		edt_send_identifying_code.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+
+
+
+
+	}
+
+    private boolean checkAccount(String account) {
+        if (account == null || account.length() == 0) {
+            showError(edt_account, "请输入账号");
+            return false;
+        } else if (!checkEmail(account)) {
+            showError(edt_account, "邮箱错误");
+            return false;
+        }
+        return true;
+    }
+
+	public static ModifyPasswordView createView(Context ctx) {
+		if (ctx == null)
+			return null;
+		ModifyPasswordView view = (ModifyPasswordView) LayoutInflater.from(ctx).inflate(ResourceUtil.getLayoutId("kfgame_sdk_view_modify_password"), null);
+		view.initView();
+		return view;
+	}
+
+	@Override
+	public String getViewTitle() {
+		return "修改密码";
+	}
+
+}

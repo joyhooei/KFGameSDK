@@ -13,7 +13,7 @@ import com.kfgame.sdk.view.viewinterface.BaseSdkView;
 
 public class SdkDialogViewManager {
 	private static SdkDialogViewManager instance;
-	private AccountDialog gameDialog;
+	private AccountDialog accountDialog;
 
 	private SdkDialogViewManager() {
 	}
@@ -25,62 +25,62 @@ public class SdkDialogViewManager {
 	}
 
 	public static void hideSoftInput(Context ctx) {
-		if (instance != null && instance.gameDialog != null) {
-			instance.gameDialog.hideSoftInput(ctx);
+		if (instance != null && instance.accountDialog != null) {
+			instance.accountDialog.hideSoftInput(ctx);
 		}
 	}
 
 	public static boolean isManagerReady() {
-		if (instance != null && instance.gameDialog != null) {
+		if (instance != null && instance.accountDialog != null) {
 			return true;
 		}
 		return false;
 	}
 
 	public void init(AccountDialog gameDialog) {
-		if (this.gameDialog == null) {
-			this.gameDialog = gameDialog;
+		if (this.accountDialog == null) {
+			this.accountDialog = gameDialog;
 		}
 	}
 
 	public static void destory() {
 		if (instance != null) {
-			instance.gameDialog = null;
+			instance.accountDialog = null;
 			instance = null;
 		}
 	}
 
 	public static Activity getOwnerActivity() {
-		if (instance != null && instance.gameDialog != null)
-			return instance.gameDialog.getOwnerActivity();
+		if (instance != null && instance.accountDialog != null)
+			return instance.accountDialog.getOwnerActivity();
 		return null;
 	}
 
 	@TargetApi(Build.VERSION_CODES.ECLAIR)
 	public static void doBackPressed() {
-		if (instance != null && instance.gameDialog != null)
-			instance.gameDialog.onBackPressed();
+		if (instance != null && instance.accountDialog != null)
+			instance.accountDialog.onBackPressed();
 	}
 
 	public static void showLoadingView() {
-		if (instance != null && instance.gameDialog != null)
-			instance.gameDialog.showLoadingView();
+		if (instance != null && instance.accountDialog != null)
+			instance.accountDialog.showLoadingView();
 	}
 
 	public static void hideLoadingView() {
-		if (instance != null && instance.gameDialog != null)
-			instance.gameDialog.hideLoadingView();
+		if (instance != null && instance.accountDialog != null)
+			instance.accountDialog.hideLoadingView();
 	}
 
 	public static void dialogDismiss() {
-		if (instance != null && instance.gameDialog != null)
-			instance.gameDialog.dismiss();
+		if (instance != null && instance.accountDialog != null)
+			instance.accountDialog.dismiss();
 	}
 
 	public static boolean doAddView(View baseSdkView) {
-		if (instance != null && instance.gameDialog != null && baseSdkView instanceof BaseSdkView) {
-			instance.gameDialog.addBaseSdkView(baseSdkView);
-			instance.gameDialog.updateView((BaseSdkView) baseSdkView);
+		if (instance != null && instance.accountDialog != null && baseSdkView instanceof BaseSdkView) {
+			instance.accountDialog.addBaseSdkView(baseSdkView);
+			instance.accountDialog.updateView((BaseSdkView) baseSdkView);
 			return true;
 		}
 		return false;
@@ -120,7 +120,7 @@ public class SdkDialogViewManager {
 					showStartAnimation(secondView, null);
 					firstView.setVisibility(View.GONE);
 					parent.removeView(firstView);
-					instance.gameDialog.updateView((BaseSdkView) secondView);
+					instance.accountDialog.updateView((BaseSdkView) secondView);
 				}
 			}, duration / 2);
 			return true;

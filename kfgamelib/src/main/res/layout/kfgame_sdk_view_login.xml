@@ -3,25 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingTop="10dp" >
+    android:orientation="vertical">
 
     <com.kfgame.sdk.view.BaseSdkBgLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="10dp" >
 
         <com.kfgame.sdk.view.WarningLinearLayout
             android:id="@+id/account_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/vsgm_tony_white_border_bg_transparent"
+            android:background="@drawable/kfgame_white_border_bg_transparent"
             android:orientation="horizontal" >
 
             <ImageView
@@ -39,7 +36,7 @@
                 android:gravity="center_vertical"
                 android:hint="请输入账号"
                 android:imeOptions="flagNoExtractUi"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
                 android:paddingLeft="12dp"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
@@ -55,10 +52,8 @@
                 android:id="@+id/passwd_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/vsgm_tony_white_border_bg_transparent"
+                android:background="@drawable/kfgame_white_border_bg_transparent"
                 android:orientation="horizontal" >
 
                 <ImageView
@@ -101,9 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/vsgm_tony_selector_orange_round"
+            android:background="@drawable/kfgame_selector_btn_orange_round"
             android:gravity="center"
             android:padding="8dp"
             android:text="登陆"
@@ -114,17 +107,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/btnQuickLogin"
+                android:id="@+id/tv_quick_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/vsgm_tony_selector_white_round_border"
+                android:background="@drawable/kfgame_selector_white_round_border"
                 android:paddingBottom="4dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
@@ -139,7 +130,7 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="center_vertical"
-	            android:background="@drawable/vsgm_tony_selector_white_round_border"
+	            android:background="@drawable/kfgame_selector_white_round_border"
 	            android:gravity="center"
 	            android:orientation="horizontal"
 	            android:paddingBottom="4dp"
@@ -175,7 +166,7 @@
                 android:orientation="horizontal" >
 
                 <ImageView
-                    android:id="@+id/btnLoginViewThirdLogin1"
+                    android:id="@+id/iv_icon_wechat_login"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
                     android:layout_marginRight="4dp"
@@ -184,7 +175,7 @@
                     android:src="@drawable/kfgame_login_weixin" />
 
                 <ImageView
-                    android:id="@+id/btnLoginViewThirdLogin2"
+                    android:id="@+id/iv_icon_qq_login"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
                     android:layout_marginRight="4dp"

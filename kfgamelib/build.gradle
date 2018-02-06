@@ -19,6 +19,7 @@ android {
         }
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -32,8 +33,11 @@ android {
 //        }
 //    }
 
+
+
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 }

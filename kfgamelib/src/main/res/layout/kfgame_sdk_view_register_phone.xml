@@ -9,18 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="15dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="10dp" >
 
         <com.kfgame.sdk.view.WarningLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_white_border_bg_transparent"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/kfgame_white_border_bg_transparent"
             android:orientation="horizontal" >
 
             <ImageView
@@ -39,7 +37,7 @@
                 android:hint="请输入手机号码"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="phone"
-                android:paddingLeft="12dp"
+                android:paddingLeft="10dp"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
@@ -49,10 +47,8 @@
         <com.kfgame.sdk.view.WarningLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_white_border_bg_transparent"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/kfgame_white_border_bg_transparent"
             android:orientation="horizontal" >
 
             <ImageView
@@ -71,7 +67,7 @@
                 android:hint="请输入密码"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="textPassword"
-                android:paddingLeft="12dp"
+                android:paddingLeft="10dp"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
@@ -81,10 +77,8 @@
         <com.kfgame.sdk.view.WarningLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_white_border_bg_transparent"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/kfgame_white_border_bg_transparent"
             android:orientation="horizontal" >
 
             <ImageView
@@ -103,7 +97,7 @@
                 android:hint="请输入验证码"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="number"
-                android:paddingLeft="12dp"
+                android:paddingLeft="10dp"
                 android:maxLines="1"
                 android:layout_weight="1"
                 android:textColor="@android:color/black"
@@ -130,8 +124,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
@@ -139,7 +131,7 @@
                 android:id="@+id/chk_policy"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@drawable/vsgm_tony_selector_checkbox_left"
+                android:background="@drawable/kfgame_selector_checkbox_left"
                 android:button="@null"
                 android:checked="true" />
 
@@ -158,9 +150,7 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_selector_orange_round"
+            android:background="@drawable/kfgame_selector_btn_orange_round"
             android:gravity="center"
             android:padding="8dp"
             android:text="注册"

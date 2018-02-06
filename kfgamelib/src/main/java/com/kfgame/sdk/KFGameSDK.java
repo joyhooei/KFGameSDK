@@ -3,10 +3,14 @@ package com.kfgame.sdk;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.kfgame.sdk.callback.SDKLoginListener;
 import com.kfgame.sdk.dialog.AccountDialog;
+import com.kfgame.sdk.dialog.SdkDialogViewManager;
+import com.kfgame.sdk.util.AppSysUtil;
+import com.kfgame.sdk.util.DeviceUtils;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.lzy.okgo.OkGo;
@@ -18,6 +22,12 @@ import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -38,6 +48,8 @@ public class KFGameSDK {
     private Activity activity;
     private Context context;
     private Application application;
+
+
 
     private static KFGameSDK ourInstance  = null;
 
@@ -70,11 +82,68 @@ public class KFGameSDK {
         this.sdkLoginListener = sdkLoginListener;
     }
 
+    private Tencent mTencent;   // QQ登陆相关
+    private IWXAPI api; // 微信登录相关
     public void initSDK(Activity activity){
         this.activity = activity;
         ResourceUtil.init(activity);
         checkSdkCallMethod();
+
+        // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
+        // 其中APP_ID是分配给第三方应用的appid，类型为String。
+        mTencent = Tencent.createInstance("Config.QQ_LOGIN_APP_ID", KFGameSDK.getInstance().getActivity().getApplicationContext());
+
+
+        //通过WXAPIFactory工厂获取IWXApI的示例
+        api = WXAPIFactory.createWXAPI(getActivity(),"Config.APP_ID_WX", true);
+        //将应用的appid注册到微信
+        api.registerApp("Config.APP_ID_WX");
     }
+
+    public IWXAPI getIWXAPI(){
+        return api;
+    }
+
+    public void QQLogin(){
+        if (!mTencent.isSessionValid())
+        {
+            //注销登录 mTencent.logout(this);
+            mTencent.login(getActivity(), "all", new IUiListener() {
+                @Override
+                public void onComplete(Object o) {
+                    LogUtil.e("" + o.toString());
+
+
+                    SdkDialogViewManager.dialogDismiss();
+                }
+
+                @Override
+                public void onError(UiError uiError) {
+
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+        }
+    }
+
+    public void WeChatLogin(){
+        /**
+         snsapi_base属于基础接口，若应用已拥有其它scope权限，则默认拥有snsapi_base的权限。
+         使用snsapi_base可以让移动端网页授权绕过跳转授权登录页请求用户授权的动作，
+         直接跳转第三方网页带上授权临时票据（code），但会使得用户已授权作用域（scope）仅为snsapi_base，
+         从而导致无法获取到需要用户授权才允许获得的数据和基础功能。
+         */
+        SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";//
+//                req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
+        req.state = "wechat_sdk_微信登录";
+        api.sendReq(req);
+    }
+
 
     public void initSDK(Application application){
         this.application = application;
@@ -108,6 +177,18 @@ public class KFGameSDK {
         });
     }
 
+    public void onNewIntent(Intent intent) {
+
+    }
+
+    public void onDestroy() {
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
     private void checkSdkCallMethod() {
         StackTraceElement stack[] = new Throwable().getStackTrace();
         for (int i = 0; i < stack.length; i++) {
@@ -136,12 +217,16 @@ public class KFGameSDK {
             LogUtil.e("KFGame", "必须在Application中初始化");
             return;
         }
-        //---------这里给出的是示例代码,告诉你可以这么传,实际使用的时候,根据需要传,不需要就不传-------------//
+        //统一请求头部字段
         HttpHeaders headers = new HttpHeaders();
-        headers.put("imei", "imei");    //header不支持中文，不允许有特殊字符
-        headers.put("androidId", "androidId");
+        headers.put("udid", DeviceUtils.getUniqueId(application));    //header不支持中文，不允许有特殊字符
+        headers.put("androidId", DeviceUtils.getAndroidID(application) + "");
+//        headers.put("phoneModule", AppSysUtil.getSysModel() + "");
+        headers.put("platform", "android");
         HttpParams params = new HttpParams();
-        params.put("platform", "android");     //param支持中文,直接传,不要自己编码
+        params.put("phoneModule", AppSysUtil.getSysModel() + "");    // 获取手机型号 //param支持中文,直接传,不要自己编码
+
+        LogUtil.e("UniqueId:" + DeviceUtils.getUniqueId(application) + " AndroidID:" + DeviceUtils.getAndroidID(application) + "");
         //----------------------------------------------------------------------------------------//
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

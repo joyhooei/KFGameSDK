@@ -3,7 +3,6 @@ package com.kfgame.sdk.okgo.callback;
 import com.google.gson.stream.JsonReader;
 import com.kfgame.sdk.model.GankResponse;
 import com.kfgame.sdk.okgo.Convert;
-import com.kfgame.sdk.util.JsonUtil;
 import com.kfgame.sdk.util.LogUtil;
 import com.lzy.okgo.callback.AbsCallback;
 

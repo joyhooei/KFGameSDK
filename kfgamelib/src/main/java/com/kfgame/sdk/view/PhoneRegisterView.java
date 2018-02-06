@@ -14,6 +14,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
 
@@ -112,6 +113,7 @@ public class PhoneRegisterView extends BaseLinearLayout {
 		tv_verificationCode.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				AccountRequest.getInstance().requestSendIdentifyCode2(accountEdit.getText().toString());
 				timer.start();
 				tv_verificationCode.setEnabled(false);
 			}

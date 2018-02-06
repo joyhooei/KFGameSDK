@@ -66,10 +66,6 @@ public class JsonConvert<T> implements Converter<T> {
     @Override
     public T convertResponse(Response response) throws Throwable {
 
-        // 重要的事情说三遍，不同的业务，这里的代码逻辑都不一样，如果你不修改，那么基本不可用
-        // 重要的事情说三遍，不同的业务，这里的代码逻辑都不一样，如果你不修改，那么基本不可用
-        // 重要的事情说三遍，不同的业务，这里的代码逻辑都不一样，如果你不修改，那么基本不可用
-
         // 如果你对这里的代码原理不清楚，可以看这里的详细原理说明: https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
         if (type == null) {
             if (clazz == null) {
@@ -143,24 +139,28 @@ public class JsonConvert<T> implements Converter<T> {
                 SimpleResponse simpleResponse = Convert.fromJson(jsonReader, SimpleResponse.class);
                 response.close();
                 //noinspection unchecked
-                return (T) simpleResponse.toLzyResponse();
+                return (T) simpleResponse.tokfgResponse();
             } else {
                 // 泛型格式如下： new JsonCallback<KFGameResponse<内层JavaBean>>(this)
-                KFGameResponse lzyResponse = Convert.fromJson(jsonReader, type);
+                KFGameResponse kfGameResponse = Convert.fromJson(jsonReader, type);
                 response.close();
-                int code = lzyResponse.code;
+                int status = kfGameResponse.status;
+                String msg = kfGameResponse.msg;
                 //这里的0是以下意思
                 //一般来说服务器会和客户端约定一个数表示成功，其余的表示失败，这里根据实际情况修改
-                if (code == 0) {
+                if (status == 1) {
                     //noinspection unchecked
-                    return (T) lzyResponse;
-                } else if (code == 104) {
+                    return (T) kfGameResponse;
+                } else if (status == 104) {
+
                     throw new IllegalStateException("用户授权信息无效");
-                } else if (code == 105) {
+
+                } else if (status == 105) {
                     throw new IllegalStateException("用户收取信息已过期");
                 } else {
                     //直接将服务端的错误信息抛出，onError中可以获取
-                    throw new IllegalStateException("错误代码：" + code + "，错误信息：" + lzyResponse.msg);
+                    throw new IllegalStateException("错误代码：" + status + "，错误信息：" + kfGameResponse.msg);
+//                    return (T) kfGameResponse;
                 }
             }
         }

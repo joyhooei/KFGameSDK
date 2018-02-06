@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kfgame.sdk.KFGameSDK;
-import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.pojo.KFGameUser;
 import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.ResourceUtil;
@@ -21,7 +20,7 @@ import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
 public class NormalLoginView extends BaseLinearLayout {
 	private boolean canQuickLogin;
 	private KFGameUser user;
-	private int passwdErrorCount = 0;
+	private int passwordErrorCount = 0;
 
 	public NormalLoginView() {
 		super(KFGameSDK.getInstance().getActivity());
@@ -99,7 +98,7 @@ public class NormalLoginView extends BaseLinearLayout {
 					return;
 				}
 				String passwd = edt_password.getText().toString().trim();
-				if (!checkPasswd(passwd)) {
+				if (!checkPassword(passwd)) {
 					return;
 				}
 
@@ -121,58 +120,47 @@ public class NormalLoginView extends BaseLinearLayout {
 		findViewById(findId("btnLoginViewForgetPw")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-				startView(ForgetPasswordView.createView(getContext()));
+				startView(ModifyPasswordView.createView(getContext()));
 			}
 		});
+
 		// 游客试玩
-		findViewById(findId("btnQuickLogin")).setOnClickListener(new BaseOnClickListener() {
+		findViewById(findId("tv_quick_login")).setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
 				Toast.makeText(KFGameSDK.getInstance().getActivity(),"游客试玩",Toast.LENGTH_SHORT).show();
 //				requestApi(SdkHttpRequest.quickLoginRequest());
 			}
 		});
-//		MobUserManager mum = MobUserManager.getInstance();
-//		List<MobUser> list = mum.accountList();
-//		if (list != null && list.size() > 0) {
-//			for (MobUser u : list) {
-//				if (!u.getType().equalsIgnoreCase("0")) {
-//					if (u.getEmail() != null && u.getEmail().length() > 0) {
-//						user = u;
-//						edt_account.setText(user.getEmail());
-//						edt_password.setText("******");
-//						canQuickLogin = true;
-//						break;
-//					}
-//				}
-//			}
-//		}
 
-		iv_qqLogin = (ImageView) findViewById(findId("btnLoginViewThirdLogin1"));
+		iv_qqLogin = (ImageView) findViewById(findId("iv_icon_qq_login"));
 		iv_qqLogin.setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
 				Toast.makeText(KFGameSDK.getInstance().getActivity(),"iv_qqLogin onBaseClick",Toast.LENGTH_SHORT).show();
 //				thirdLogin((ThirdType) v.getTag());
+                KFGameSDK.getInstance().QQLogin();
 			}
 		});
-		iv_wxLogin = (ImageView) findViewById(findId("btnLoginViewThirdLogin2"));
+
+		iv_wxLogin = (ImageView) findViewById(findId("iv_icon_wechat_login"));
 		iv_wxLogin.setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
 				Toast.makeText(KFGameSDK.getInstance().getActivity(),"iv_wxLogin onBaseClick",Toast.LENGTH_SHORT).show();
 //				thirdLogin((ThirdType) v.getTag());
+                KFGameSDK.getInstance().WeChatLogin();
 			}
 		});
 
 	}
 
-	private boolean checkPasswd(String passwd) {
-		if (passwd == null || passwd.length() == 0) {
+	private boolean checkPassword(String password) {
+		if (password == null || password.length() == 0) {
 			showError(edt_password, edt_password.getHint().toString());
 			return false;
 		}
-		if (passwd.length() < 6) {
+		if (password.length() < 6) {
 			showError(edt_password, "密码长度必须大于6");
 			return false;
 		}
@@ -185,6 +173,9 @@ public class NormalLoginView extends BaseLinearLayout {
 			return false;
 		} else if (!checkEmail(account)) {
 			showError(edt_account, "邮箱错误");
+			return false;
+		} else if (!checkPhone(account)) {
+			showError(edt_account, "请输入正确的电话号码");
 			return false;
 		}
 		return true;

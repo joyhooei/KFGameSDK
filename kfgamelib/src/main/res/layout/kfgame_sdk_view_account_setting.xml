@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="20dp" >
 
         <LinearLayout
@@ -21,9 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_selector_white_round_border"
+            android:background="@drawable/kfgame_selector_white_round_border"
             android:orientation="horizontal"
             android:paddingLeft="24dp" >
 
@@ -52,7 +50,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_selector_white_round_border"
+            android:background="@drawable/kfgame_selector_white_round_border"
             android:orientation="horizontal"
             android:paddingLeft="24dp"
             android:visibility="gone" >
@@ -80,9 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_selector_white_round_border"
+            android:background="@drawable/kfgame_selector_white_round_border"
             android:orientation="horizontal"
             android:paddingLeft="24dp"
             android:visibility="invisible" >
@@ -109,9 +105,7 @@
             android:id="@+id/forget_passwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/vsgm_tony_selector_white_round_border"
+            android:background="@drawable/kfgame_selector_white_round_border"
             android:orientation="horizontal"
             android:paddingLeft="24dp" >
 
@@ -120,7 +114,7 @@
                 android:layout_height="32dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="找回密码"
+                android:text="修改密码"
                 android:textColor="@android:color/black"
                 android:textSize="16dp" />
 

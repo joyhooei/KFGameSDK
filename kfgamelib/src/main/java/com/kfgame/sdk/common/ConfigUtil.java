@@ -13,6 +13,8 @@ import com.kfgame.sdk.util.SPUtil;
 
 public class ConfigUtil {
 
+
+
     public static final String LOGIN_QQ = "qq_login";
     public static final String LOGIN_WEIXIN = "weixin_login";
     public static final String LOGIN_WEIBO = "weibo_login";

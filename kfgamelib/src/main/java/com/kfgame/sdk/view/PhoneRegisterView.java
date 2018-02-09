@@ -1,26 +1,23 @@
 package com.kfgame.sdk.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kfgame.sdk.dialog.SDKWebViewDialog;
 import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class PhoneRegisterView extends BaseLinearLayout {
 
@@ -40,8 +37,11 @@ public class PhoneRegisterView extends BaseLinearLayout {
 	private EditText passwordEdit;
     private EditText verificationCodeEdit;
 	private TextView tv_verificationCode;
+	private TextView tv_policy_agreement;
+    private ImageView iv_password_visible;
 
-	@Override
+
+    @Override
 	public void initView() {
 		accountEdit = (EditText) findViewById(findId("edt_phone_account"));
 		accountEdit.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -49,30 +49,11 @@ public class PhoneRegisterView extends BaseLinearLayout {
 			public void onFocusChange(View view, boolean isFocus) {
 				String str = accountEdit.getText().toString().trim();
 				if (!isFocus) {
-					checkAccount(str);
+				    checkAccount(str);
 				}
 			}
 		});
-		accountEdit.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String editable;
-                editable = accountEdit.getText().toString();
-                String str = stringFilter(editable);
-				if (!editable.equals(str)) {
-					accountEdit.setText(str);
-					accountEdit.setSelection(str.length());
-				}
-			}
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
 		passwordEdit = (EditText) findViewById(findId("edt_password"));
 		passwordEdit.setTypeface(Typeface.DEFAULT);
 
@@ -82,30 +63,36 @@ public class PhoneRegisterView extends BaseLinearLayout {
 		tv_verificationCode = (TextView) findViewById(findId("tv_send_identifying_code"));
 		final TextView btnRegister = (TextView) findViewById(ResourceUtil.getId("btnRegister"));
 
-		final CheckBox policyCheckBox = (CheckBox) findViewById(ResourceUtil.getId("chk_policy"));
-		policyCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				btnRegister.setEnabled(isChecked);
-			}
-		});
+        iv_password_visible = (ImageView) findViewById(findId("iv_password_visible"));
+        iv_password_visible.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                passwordEdit.setInputType();
+            }
+        });
+
+        // 注册按钮点击事件
 		btnRegister.setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
 				String phoneAccount = accountEdit.getText().toString().trim();
 				if (!checkAccount(phoneAccount))
 					return;
+
+                String verificationCode = verificationCodeEdit.getText().toString().trim();
+                if (!checkVerificationCode(verificationCode)){
+                    showError(verificationCodeEdit,"请输入正确的验证码");
+                    return;
+                }
+
 				String password = passwordEdit.getText().toString().trim();
 				int passwordCheck = checkPassword(password);
 				if (passwordCheck < 1) {
 					showError(passwordEdit, passwordCheck == 0 ? passwordEdit.getHint().toString()
-							: "密码必须由6-10位数字和字母组成");
+							: "密码必须由6-13位数字和字母组成");
 					return;
 				}
-				String verificationCode = verificationCodeEdit.getText().toString().trim();
-                if (!checkVerificationCode(verificationCode)){
-                    showError(verificationCodeEdit,"请输入正确的验证码");
-                }
+
 //				requestApi(SdkHttpRequest.registerRequest(phoneAccount, password , verificationCode));
 			}
 		});
@@ -113,22 +100,20 @@ public class PhoneRegisterView extends BaseLinearLayout {
 		tv_verificationCode.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AccountRequest.getInstance().requestSendIdentifyCode2(accountEdit.getText().toString());
+				AccountRequest.getInstance().requestSendIdentifyCode(accountEdit.getText().toString());
 				timer.start();
 				tv_verificationCode.setEnabled(false);
 			}
 		});
 
-		findViewById(ResourceUtil.getId("tx_agreement_policy")).setOnClickListener(new BaseOnClickListener() {
+		tv_policy_agreement = (TextView) findViewById(ResourceUtil.getId("tx_agreement_policy"));
+        SpannableStringBuilder styled = new SpannableStringBuilder(tv_policy_agreement.getText());
+        styled.setSpan(new ForegroundColorSpan(Color.BLUE), 5, 11, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		tv_policy_agreement.setText(styled);
+		tv_policy_agreement.setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-//				new SdkGameWebViewDialog(getContext(), WebViewType.Policy).show();
-//				policyCheckBox.postDelayed(new Runnable() {
-//					@Override
-//					public void run() {
-//						policyCheckBox.setChecked(true);
-//					}
-//				}, 500);
+				new SDKWebViewDialog(getContext(), SDKWebViewDialog.WebViewType.Policy).show();
 			}
 		});
 	}
@@ -158,46 +143,11 @@ public class PhoneRegisterView extends BaseLinearLayout {
 		return true;
 	}
 
-	public static String stringFilter(String str) throws PatternSyntaxException {
-		String regEx = "[^a-zA-Z0-9.@_-]";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(str);
-		return m.replaceAll("").trim().toLowerCase();
-	}
-
-	private int checkPassword(String passwd) {
-		if (passwd == null || passwd.length() == 0) {
-			return 0;
-		}
-		if (passwd.length() < 6) {
-			return -1;
-		}
-		return 1;
-	}
-
-    private boolean checkVerificationCode(String verificationCode) {
-        boolean flag;
-        if (verificationCode == null || verificationCode.length() == 0) {
-            return false;
-        }
-        if (verificationCode.length() < 4) {
-            return false;
-        }
-        try {
-            String check = "/\\b\\d{4,6}\\b/g";
-            Pattern regex = Pattern.compile(check);
-            Matcher matcher = regex.matcher(verificationCode);
-            flag = matcher.matches();
-        } catch (Exception e) {
-            flag = false;
-        }
-        return flag;
-    }
-
 	public static PhoneRegisterView createView(Context ctx) {
 		if (ctx == null)
 			return null;
-		PhoneRegisterView view = (PhoneRegisterView) LayoutInflater.from(ctx).inflate(ResourceUtil.getLayoutId("kfgame_sdk_view_register_phone"), null);
+		PhoneRegisterView view = (PhoneRegisterView) LayoutInflater.from(ctx)
+				.inflate(ResourceUtil.getLayoutId("kfgame_sdk_view_register_phone"), null);
 		view.initView();
 		return view;
 	}

@@ -153,6 +153,43 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		return flag;
 	}
 
+    public int checkPassword(String passwd) {
+        if (passwd == null || passwd.length() == 0) {
+            return 0;
+        }
+        if (passwd.length() < 6) {
+            return -1;
+        }
+
+		try {
+			String check = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,13}$";
+			Pattern regex = Pattern.compile(check);
+			Matcher matcher = regex.matcher(passwd);
+			return matcher.matches() == true ? 1 : -1;
+		} catch (Exception e) {
+			return 0;
+		}
+    }
+
+    public boolean checkVerificationCode(String verificationCode) {
+        boolean flag;
+        if (verificationCode == null || verificationCode.length() == 0) {
+            return false;
+        }
+        if (verificationCode.length() < 4) {
+            return false;
+        }
+        try {
+            String check = "^(\\d{4,6})$";
+            Pattern regex = Pattern.compile(check);
+            Matcher matcher = regex.matcher(verificationCode);
+            flag = matcher.matches();
+        } catch (Exception e) {
+            flag = false;
+        }
+        return flag;
+    }
+
 	public boolean checkPhone(String phone) {
 		boolean flag;
 		try {
@@ -203,10 +240,11 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 	protected void thirdLogin(ThirdType type) {
 		if (NetCheckUtil.isNetworkStatus(getContext())) {
 			if (type == ThirdType.QQ) {
-                Toast.makeText(KFGameSDK.getInstance().getActivity(),"QQ登陆",Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(KFGameSDK.getInstance().getActivity(),"QQ登陆",Toast.LENGTH_SHORT).show();
+                KFGameSDK.getInstance().QQLogin();
 			} else if (type == ThirdType.wechat) {
                 Toast.makeText(KFGameSDK.getInstance().getActivity(),"微信登陆",Toast.LENGTH_SHORT).show();
+                KFGameSDK.getInstance().WeChatLogin();
 
 			} else if (type == ThirdType.weibo) {
                 Toast.makeText(KFGameSDK.getInstance().getActivity(),"微博登陆",Toast.LENGTH_SHORT).show();

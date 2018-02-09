@@ -62,6 +62,7 @@ public abstract class EncryptCallback<T> extends JsonCallback<T> {
                 return lhs.compareTo(rhs);
             }
         };
+
         Map<String, String> treeMap = new TreeMap<>(comparator);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             treeMap.put(entry.getKey(), entry.getValue());

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.kfgame.sdk.callback.SDKLoginListener;
 import com.kfgame.sdk.dialog.AccountDialog;
 import com.kfgame.sdk.dialog.SdkDialogViewManager;
+import com.kfgame.sdk.request.SDKInit;
 import com.kfgame.sdk.util.AppSysUtil;
 import com.kfgame.sdk.util.DeviceUtils;
 import com.kfgame.sdk.util.LogUtil;
@@ -22,6 +23,7 @@ import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
+
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -89,15 +91,9 @@ public class KFGameSDK {
         ResourceUtil.init(activity);
         checkSdkCallMethod();
 
-        // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
-        // 其中APP_ID是分配给第三方应用的appid，类型为String。
-        mTencent = Tencent.createInstance("Config.QQ_LOGIN_APP_ID", KFGameSDK.getInstance().getActivity().getApplicationContext());
 
+        SDKInit.getInstance().sdkInit();
 
-        //通过WXAPIFactory工厂获取IWXApI的示例
-        api = WXAPIFactory.createWXAPI(getActivity(),"Config.APP_ID_WX", true);
-        //将应用的appid注册到微信
-        api.registerApp("Config.APP_ID_WX");
     }
 
     public IWXAPI getIWXAPI(){
@@ -218,15 +214,15 @@ public class KFGameSDK {
             return;
         }
         //统一请求头部字段
-        HttpHeaders headers = new HttpHeaders();
-        headers.put("udid", DeviceUtils.getUniqueId(application));    //header不支持中文，不允许有特殊字符
-        headers.put("androidId", DeviceUtils.getAndroidID(application) + "");
-//        headers.put("phoneModule", AppSysUtil.getSysModel() + "");
-        headers.put("platform", "android");
-        HttpParams params = new HttpParams();
-        params.put("phoneModule", AppSysUtil.getSysModel() + "");    // 获取手机型号 //param支持中文,直接传,不要自己编码
-
-        LogUtil.e("UniqueId:" + DeviceUtils.getUniqueId(application) + " AndroidID:" + DeviceUtils.getAndroidID(application) + "");
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.put("udid", DeviceUtils.getUniqueId(application));    //header不支持中文，不允许有特殊字符
+//        headers.put("androidId", DeviceUtils.getAndroidID(application) + "");
+////        headers.put("phoneModule", AppSysUtil.getSysModel() + "");
+//        headers.put("platform", "android");
+//        HttpParams params = new HttpParams();
+//        params.put("phoneModule", AppSysUtil.getSysModel() + "");    // 获取手机型号 //param支持中文,直接传,不要自己编码
+//
+//        LogUtil.e("UniqueId:" + DeviceUtils.getUniqueId(application) + " AndroidID:" + DeviceUtils.getAndroidID(application) + "");
         //----------------------------------------------------------------------------------------//
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -267,9 +263,9 @@ public class KFGameSDK {
                 .setOkHttpClient(builder.build())                //建议设置OkHttpClient，不设置会使用默认的
                 .setCacheMode(CacheMode.NO_CACHE)               //全局统一缓存模式，默认不使用缓存，可以不传
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)  //全局统一缓存时间，默认永不过期，可以不传
-                .setRetryCount(3)                                //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
-                .addCommonHeaders(headers)                       //全局公共头
-                .addCommonParams(params);                        //全局公共参数
+                .setRetryCount(3);                             //全局统一超时重连次数，默认为三次，那么最差的情况会请求4次(一次原始请求，三次重连请求)，不需要可以设置为0
+//                .addCommonHeaders(headers)                       //全局公共头
+//                .addCommonParams(params);                        //全局公共参数
     }
 
 

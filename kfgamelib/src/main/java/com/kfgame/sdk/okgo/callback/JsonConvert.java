@@ -145,16 +145,14 @@ public class JsonConvert<T> implements Converter<T> {
                 KFGameResponse kfGameResponse = Convert.fromJson(jsonReader, type);
                 response.close();
                 int status = kfGameResponse.status;
-                String msg = kfGameResponse.msg;
+                String msg = kfGameResponse.msg == null ? "" : kfGameResponse.msg;
                 //这里的0是以下意思
                 //一般来说服务器会和客户端约定一个数表示成功，其余的表示失败，这里根据实际情况修改
                 if (status == 1) {
                     //noinspection unchecked
                     return (T) kfGameResponse;
-                } else if (status == 104) {
-
-                    throw new IllegalStateException("用户授权信息无效");
-
+                } else if (status == 0) {
+                    throw new IllegalStateException("" + msg);
                 } else if (status == 105) {
                     throw new IllegalStateException("用户收取信息已过期");
                 } else {

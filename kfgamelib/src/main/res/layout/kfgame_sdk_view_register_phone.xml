@@ -22,9 +22,9 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="#A0808080"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:padding="5dp"
                 android:src="@drawable/kfgame_icon_account" />
 
@@ -41,7 +41,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
         </com.kfgame.sdk.view.WarningLinearLayout>
 
         <com.kfgame.sdk.view.WarningLinearLayout
@@ -52,39 +52,9 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="#A0808080"
-                android:padding="5dp"
-                android:src="@drawable/kfgame_icon_password" />
-
-            <EditText
-                android:id="@+id/edt_password"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:hint="请输入密码"
-                android:imeOptions="flagNoExtractUi"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:maxLines="1"
-                android:textColor="@android:color/black"
-                android:textColorHint="#909090"
-                android:textSize="14dp" />
-        </com.kfgame.sdk.view.WarningLinearLayout>
-
-        <com.kfgame.sdk.view.WarningLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/kfgame_white_border_bg_transparent"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="#A0808080"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:padding="5dp"
                 android:src="@drawable/kfgame_icon_password" />
 
@@ -102,7 +72,7 @@
                 android:layout_weight="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/tv_send_identifying_code"
@@ -120,6 +90,45 @@
                 android:textSize="10dp" />
         </com.kfgame.sdk.view.WarningLinearLayout>
 
+        <com.kfgame.sdk.view.WarningLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/kfgame_white_border_bg_transparent"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/kfgame_icon_password" />
+
+            <EditText
+                android:id="@+id/edt_password"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:hint="请输入密码"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textColorHint="#909090"
+                android:textSize="12dp" />
+
+            <ImageView
+                android:id="@+id/iv_password_visible"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/kfgame_password_invisible" />
+        </com.kfgame.sdk.view.WarningLinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,6 +142,7 @@
                 android:layout_height="20dp"
                 android:background="@drawable/kfgame_selector_checkbox_left"
                 android:button="@null"
+                android:visibility="gone"
                 android:checked="true" />
 
             <TextView
@@ -141,9 +151,9 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
-                android:text="同意用户协议"
+                android:text="注册即同意《用户协议》"
                 android:textColor="@android:color/black"
-                android:textSize="15dp" />
+                android:textSize="12dp" />
         </LinearLayout>
 
         <com.kfgame.sdk.view.SdkTipsTextView

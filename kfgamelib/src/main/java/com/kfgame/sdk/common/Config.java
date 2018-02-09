@@ -1,12 +1,23 @@
 package com.kfgame.sdk.common;
 
-import android.content.Context;
 
 /**
  * Created by Tobin on 2018/1/29.
  */
 
 public class Config {
+    // Used to load the 'kfgamelib' library on application startup.
+//    static {
+//        System.loadLibrary("kfgamelib");
+//    }
+
+    /**
+     * A native method that is implemented by the 'native-lib' native library,
+     * which is packaged with this application.
+     */
+//    public native static String getEncodeKey();
+//    public native String getMd5();
+
     public static String API_VERSION = "1.0.0";
     public static String sdkTitle = "KFGameSDK";
     public static String SDK_VERSION = "1.0.0";
@@ -16,8 +27,11 @@ public class Config {
     public static String CHANNEL_ID = "1";
     public static String APP_ID = "1";
 
-    public static String URL_BASE_V1 = "http://192.168.1.88:8081/v1/";
+    public static String URL_BASE_V1 = "http://192.168.1.88:8082/v1/";
     public static String URL_BASE_V2 = "http://192.168.1.88:8081/v2/";
+
+    public static String URL_SDK_INIT = URL_BASE_V1 + "basic/init";
+
 
     public static String SEND_IDENTIFY_CODE = URL_BASE_V1 + "account/sendSmsCode";
     public static String NORMAL_LOGIN = URL_BASE_V1 + "account/sendSmsCode";
@@ -27,5 +41,7 @@ public class Config {
     public static String THIRD_LOGIN = URL_BASE_V1 + "account/sendSmsCode";
 
     public static final String URL_GANK_BASE = "http://gank.io/api/data/Android/10/1";
+
+    public static final String encodeKey = "1";
 
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">kfgamelib</string>
+
+    <string name="tv_forget_password"></string>
 </resources>

@@ -14,7 +14,6 @@ import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,7 +44,7 @@ public class AccountDialog extends Dialog {
 
     public AccountDialog(@NonNull Context context, ViewType type) {
         super(context, getStyleId((Activity) context,"kfgame_account_dialog_theme"));
-        this.activity = (Activity) context;this.type = type;
+        this.activity = (Activity) context;
         this.type = type;
     }
 
@@ -59,7 +58,7 @@ public class AccountDialog extends Dialog {
         SdkDialogViewManager.getManager().init(this);
         rootView =(RelativeLayout)  getLayoutInflater().inflate(getLayoutId("kfgame_sdk_layout_account_base"), null);
         setContentView(rootView);
-        containerView = (RelativeLayout) rootView.findViewById(ResourceUtil.getId("container_view"));
+        containerView = (RelativeLayout) rootView.findViewById(getId("container_view"));
 
         AlphaAnimation animation = new AlphaAnimation(0, 1);
         animation.setDuration(200);
@@ -74,32 +73,22 @@ public class AccountDialog extends Dialog {
                 onBackPressed();
             }
         });
-        menuImage = (ImageView) findViewById(ResourceUtil.getId("iv_login_top_menu"));
+
+        menuImage = (ImageView) findViewById(getId("iv_login_top_menu"));
         menuImage.setOnClickListener(new BaseOnClickListener() {
             @Override
             public void onBaseClick(View v) {
                 SdkDialogViewManager.doAddView(SdkSettingView.createView(getContext()));
             }
         });
-        tv_title = (TextView) rootView.findViewById(ResourceUtil.getId("kfgame_tv_title"));
+
+        tv_title = (TextView) rootView.findViewById(getId("kfgame_tv_title"));
 
         progressView = findViewById(ResourceUtil.getId("progress_view"));
 
-        BaseSdkView sdkView;
-        if (type == ViewType.UpdateAccount) {
-//            sdkView = UpdateAccountView.createView(getContext());
-        } else if (type == ViewType.ChangePassword) {
-//            sdkView = ChangePasswdView.createView(getContext());
-        } else {
-//            sdkView = NormalLoginView.createView(getContext());
-        }
-        sdkView = NormalLoginView.createView(getContext());
+        BaseSdkView sdkView = NormalLoginView.createView(getContext());
         containerView.addView((View) sdkView, sdkView.getSdkViewLayoutParams());
         updateView(sdkView);
-
-        if (showAfterCallback != null) {
-            showAfterCallback.run();
-        }
 
     }
 
@@ -119,11 +108,6 @@ public class AccountDialog extends Dialog {
         return activity.getResources().getIdentifier(paramString, "id",activity.getPackageName());
     }
 
-    private Runnable showAfterCallback;
-    public void showWithCallback(Runnable callback) {
-        showAfterCallback = callback;
-        show();
-    }
 
     public void showLoadingView() {
         progressView.setVisibility(View.VISIBLE);
@@ -176,7 +160,7 @@ public class AccountDialog extends Dialog {
 
     private void updateViewMenu(boolean isMenuEnable) {
         if (isMenuEnable) {
-            menuImage.setVisibility(View.VISIBLE);
+            menuImage.setVisibility(View.GONE);
         } else {
             menuImage.setVisibility(View.GONE);
         }

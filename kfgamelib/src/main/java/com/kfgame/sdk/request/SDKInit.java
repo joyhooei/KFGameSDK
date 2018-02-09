@@ -1,5 +1,6 @@
 package com.kfgame.sdk.request;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.kfgame.sdk.KFGameSDK;
@@ -43,16 +44,17 @@ public class SDKInit {
     }
 
     public void sdkInit() {
+        Context context = KFGameSDK.getInstance().getActivity();
         TreeMap<String,String> paraMap = new TreeMap<>();
         paraMap.put("appId",Config.APP_ID);
         paraMap.put("channelId",Config.CHANNEL_ID);
-        paraMap.put("deviceInfo","deviceInfo");
-        paraMap.put("imei","imei");
-        paraMap.put("imsi","imsi");
-        paraMap.put("mac","mac");
-        paraMap.put("mobile","mobile");
+        paraMap.put("deviceInfo",DeviceUtils.getSize(context));
+        paraMap.put("imei",DeviceUtils.getIMEI(context));
+        paraMap.put("imsi",DeviceUtils.getIMSI(context));
+        paraMap.put("mac",DeviceUtils.getAdresseMAC(context));
+        paraMap.put("mobile",DeviceUtils.getPhoneNumber(context));
         paraMap.put("osInfo","android");
-        paraMap.put("udid",DeviceUtils.getUniqueId(KFGameSDK.getInstance().getActivity()));
+        paraMap.put("udid",DeviceUtils.getUniqueId(context));
         paraMap.put("timestamp", System.currentTimeMillis() / 1000 + "");
         paraMap.put("version",Config.API_VERSION);
 
@@ -65,8 +67,8 @@ public class SDKInit {
             LogUtil.e("Tobin getKey: " + entry.getKey() + " getValue: " + entry.getValue());
         }
 
-        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + Config.encodeKey + "addf");
-        String sign = Encryption.md5Crypt(signpre + Config.encodeKey + "addf");
+        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + Config.encodeKey);
+        String sign = Encryption.md5Crypt(signpre + Config.encodeKey);
         LogUtil.e("Tobin: sign md5Crypt: " + sign);
 
         paraMap.put("sign",sign);

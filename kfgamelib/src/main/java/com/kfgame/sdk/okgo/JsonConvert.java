@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kfgame.sdk.okgo.callback;
+package com.kfgame.sdk.okgo;
 
 import com.google.gson.stream.JsonReader;
 
@@ -22,6 +22,7 @@ import com.kfgame.sdk.model.KFGameResponse;
 //import com.lzy.demo.utils.Convert;
 import com.kfgame.sdk.model.SimpleResponse;
 import com.kfgame.sdk.okgo.Convert;
+import com.kfgame.sdk.util.LogUtil;
 import com.lzy.okgo.convert.Converter;
 
 import org.json.JSONArray;
@@ -140,25 +141,22 @@ public class JsonConvert<T> implements Converter<T> {
                 response.close();
                 //noinspection unchecked
                 return (T) simpleResponse.tokfgResponse();
-            } else {
+            }else {
                 // 泛型格式如下： new JsonCallback<KFGameResponse<内层JavaBean>>(this)
                 KFGameResponse kfGameResponse = Convert.fromJson(jsonReader, type);
                 response.close();
                 int status = kfGameResponse.status;
                 String msg = kfGameResponse.msg == null ? "" : kfGameResponse.msg;
-                //这里的0是以下意思
-                //一般来说服务器会和客户端约定一个数表示成功，其余的表示失败，这里根据实际情况修改
+
+                //服务器会和客户端约定一个数1表示成功，其余的表示失败
                 if (status == 1) {
                     //noinspection unchecked
                     return (T) kfGameResponse;
                 } else if (status == 0) {
                     throw new IllegalStateException("" + msg);
-                } else if (status == 105) {
-                    throw new IllegalStateException("用户收取信息已过期");
                 } else {
                     //直接将服务端的错误信息抛出，onError中可以获取
                     throw new IllegalStateException("错误代码：" + status + "，错误信息：" + kfGameResponse.msg);
-//                    return (T) kfGameResponse;
                 }
             }
         }

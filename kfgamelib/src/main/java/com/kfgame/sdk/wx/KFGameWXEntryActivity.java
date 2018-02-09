@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.kfgame.sdk.KFGameSDK;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -64,12 +63,12 @@ public class KFGameWXEntryActivity  extends Activity implements IWXAPIEventHandl
 
     @Override
     public void onReq(BaseReq baseReq) {
-        Log.d("", "baseReq:"+ JSON.toJSONString(baseReq));
+//        Log.d("", "baseReq:"+ JSON.toJSONString(baseReq));
     }
 
     @Override
     public void onResp(BaseResp baseResp) {
-        Log.d("Tobin", "baseResp:"+ JSON.toJSONString(baseResp));
+//        Log.d("Tobin", "baseResp:"+ JSON.toJSONString(baseResp));
         Log.d("Tobin", "baseResp:"+baseResp.errStr+","+baseResp.openId+","+baseResp.transaction+","+baseResp.errCode);
         String result = "";
         switch(baseResp.errCode) {

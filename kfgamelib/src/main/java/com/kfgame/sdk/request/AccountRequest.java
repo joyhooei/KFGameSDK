@@ -6,6 +6,7 @@ import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.common.Encryption;
 import com.kfgame.sdk.model.KFGameResponse;
+import com.kfgame.sdk.model.SimpleResponse;
 import com.kfgame.sdk.okgo.callback.JsonCallback;
 import com.kfgame.sdk.pojo.InitModel;
 import com.kfgame.sdk.pojo.KFGameUser;
@@ -47,6 +48,7 @@ public class AccountRequest {
         paraMap.put("appId",Config.APP_ID);
         paraMap.put("channelId",Config.CHANNEL_ID);
         paraMap.put("mobile", userName);
+        paraMap.put("passWord", passWord);
         paraMap.put("udid",DeviceUtils.getUniqueId(KFGameSDK.getInstance().getActivity()));
         paraMap.put("timestamp", System.currentTimeMillis() / 1000 + "");
         paraMap.put("version",Config.API_VERSION);
@@ -117,7 +119,7 @@ public class AccountRequest {
         paraMap.put("version",Config.API_VERSION);
 
         String signpre = "";
-        PostRequest postRequest = OkGo.<KFGameResponse<InitModel>>post(Config.SEND_IDENTIFY_CODE);
+        PostRequest postRequest = OkGo.<SimpleResponse>post(Config.SEND_IDENTIFY_CODE);
         postRequest.cacheMode(CacheMode.NO_CACHE);
         for (Map.Entry<String, String> entry: paraMap.entrySet()) {
             signpre +=entry.getKey() + "=" + entry.getValue() + "&";
@@ -136,14 +138,14 @@ public class AccountRequest {
         postRequest.upJson(jsons);
 
         postRequest.tag("initSDK");
-        postRequest.execute(new JsonCallback<KFGameResponse<JSONObject>>() {
+        postRequest.execute(new JsonCallback<SimpleResponse>() {
             @Override
-            public void onStart(Request<KFGameResponse<JSONObject>, ? extends Request> request) {
+            public void onStart(Request<SimpleResponse, ? extends Request> request) {
                 LogUtil.e("Tobin: sdkInit onStart: ");
             }
 
             @Override
-            public void onError(Response<KFGameResponse<JSONObject>> response) {
+            public void onError(Response<SimpleResponse> response) {
                 String error = response.getException().getMessage();
                 LogUtil.e("Tobin onError" + error);
                 LogUtil.e("Tobin: sdkInit onError: ");
@@ -156,7 +158,7 @@ public class AccountRequest {
             }
 
             @Override
-            public void onSuccess(Response<KFGameResponse<JSONObject>> response) {
+            public void onSuccess(Response<SimpleResponse> response) {
                 LogUtil.e("Tobin: sdkInit onSuccess: ");
             }
         });

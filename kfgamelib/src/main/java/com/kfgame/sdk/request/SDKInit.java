@@ -77,32 +77,34 @@ public class SDKInit {
         postRequest.upJson(jsons);
 
         postRequest.tag("initSDK");
-        postRequest.execute(new JsonCallback<KFGameResponse<InitModel>>() {
-            @Override
-            public void onStart(Request<KFGameResponse<InitModel>, ? extends Request> request) {
-                LogUtil.e("Tobin: sdkInit onStart: ");
-            }
-
-            @Override
-            public void onError(Response<KFGameResponse<InitModel>> response) {
-                String error = response.getException().getMessage();
-                LogUtil.e("Tobin onError" + error);
-                LogUtil.e("Tobin: sdkInit onError: ");
-                Toast.makeText(KFGameSDK.getInstance().getActivity(),"SDK初始化: " + error,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFinish() {
-                LogUtil.e("Tobin: sdkInit onFinish: ");
-            }
-
-            @Override
-            public void onSuccess(Response<KFGameResponse<InitModel>> response) {
-                initModel = response.body().data;
-                LogUtil.e("Tobin: sdkInit onSuccess: " + initModel.toString());
-            }
-        });
+        postRequest.execute(jsonCallback);
 
     }
+
+    JsonCallback jsonCallback = new JsonCallback<KFGameResponse<InitModel>>() {
+        @Override
+        public void onStart(Request<KFGameResponse<InitModel>, ? extends Request> request) {
+            LogUtil.e("Tobin: sdkInit onStart: ");
+        }
+
+        @Override
+        public void onError(Response<KFGameResponse<InitModel>> response) {
+            String error = response.getException().getMessage();
+            LogUtil.e("Tobin onError" + error);
+            LogUtil.e("Tobin: sdkInit onError: ");
+            Toast.makeText(KFGameSDK.getInstance().getActivity(), "SDK初始化: " + error,Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFinish() {
+            LogUtil.e("Tobin: sdkInit onFinish: ");
+        }
+
+        @Override
+        public void onSuccess(Response<KFGameResponse<InitModel>> response) {
+            initModel = response.body().data;
+            LogUtil.e("Tobin: sdkInit onSuccess: " + initModel.toString());
+        }
+    };
 
 }

@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         kfGameSDK = KFGameSDK.getInstance();
-        kfGameSDK.initSDK(this);
+        kfGameSDK.initSDK(this, "1", "1");
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

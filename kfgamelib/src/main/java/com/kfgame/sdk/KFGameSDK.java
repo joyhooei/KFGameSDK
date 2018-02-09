@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.kfgame.sdk.callback.SDKLoginListener;
+import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.dialog.AccountDialog;
 import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.request.SDKInit;
@@ -86,14 +87,20 @@ public class KFGameSDK {
 
     private Tencent mTencent;   // QQ登陆相关
     private IWXAPI api; // 微信登录相关
-    public void initSDK(Activity activity){
+    public void initSDK(Activity activity,String APP_ID, String CHANNEL_ID){
         this.activity = activity;
+        Config.APP_ID = APP_ID;
+        Config.CHANNEL_ID = CHANNEL_ID;
         ResourceUtil.init(activity);
         checkSdkCallMethod();
 
-
         SDKInit.getInstance().sdkInit();
 
+    }
+
+    public void initSDK(Application application){
+        this.application = application;
+        initOkGo();
     }
 
     public IWXAPI getIWXAPI(){
@@ -141,10 +148,7 @@ public class KFGameSDK {
     }
 
 
-    public void initSDK(Application application){
-        this.application = application;
-        initOkGo();
-    }
+
 
     public void sdkLogin(SDKLoginListener sdkLoginListener) {
         setGamaterSDKListener(sdkLoginListener);

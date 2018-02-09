@@ -82,7 +82,7 @@ public class DeviceUtils {
      * @return  手机型号
      */
     public static String getSystemModel() {
-        return android.os.Build.MODEL;
+        return android.os.Build.MODEL == null ? "" : android.os.Build.MODEL;
     }
 
     /**

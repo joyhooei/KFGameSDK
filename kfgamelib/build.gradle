@@ -9,7 +9,6 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         externalNativeBuild {
@@ -22,6 +21,7 @@ android {
 
     buildTypes {
         release {
+            // 是否混淆代码
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -38,4 +38,59 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+}
+
+task makeJar(type: Jar, dependsOn: ['compileReleaseJavaWithJavac']) {
+//    appendix = 'demo'
+    baseName = 'kfgamesdk'
+    version = '1.0.0'
+    classifier = 'release'
+    //后缀名
+    extension = 'jar'
+    //最终的 Jar 包名，如果没设置，默认为 [baseName]-[appendix]-[version]-[classifier].[extension]
+    //archiveName = 'Demo.jar'
+    //需打包的资源所在的路径集
+    def srcClassDir = [project.buildDir.absolutePath + "/intermediates/classes/release"]
+    //初始化资源路径集
+    from srcClassDir
+    //去除路径集下部分的资源
+    exclude 'com/kfgame/sdk/BuildConfig.class'
+    exclude '**/R.class'
+    exclude '**/R\$*.class'
+    //只导入资源路径集下的部分资源
+    include 'com/kfgame/sdk/**/*.class'
+    include 'com/lzy/okgo/**/*.class'
+
+
+}
+
+task proguardJar(dependsOn: ['makeJar'], type: proguard.gradle.ProGuardTask) {
+    //Android 默认的 proguard 文件
+    configuration android.getDefaultProguardFile('proguard-android.txt')
+    //manifest 注册的组件对应的 proguard 文件
+    configuration 'proguard-rules.pro'
+    String inJar = makeJar.archivePath.getAbsolutePath()
+    //输入 jar
+    injars inJar
+    //输出 jar
+    outjars inJar.substring(0, inJar.lastIndexOf(File.separator)) + "/proguard-${makeJar.archiveName}"
+    //设置不删除未引用的资源(类，方法等)
+    dontshrink
+    Plugin plugin = getPlugins().hasPlugin("AppPlugin") ?
+            getPlugins().findPlugin("AppPlugin") :
+            getPlugins().findPlugin("LibraryPlugin")
+    if (plugin != null) {
+        List<String> runtimeJarList
+        if (plugin.getMetaClass().getMetaMethod("getRuntimeJarList")) {
+            runtimeJarList = plugin.getRuntimeJarList()
+        } else if (android.getMetaClass().getMetaMethod("getBootClasspath")) {
+            runtimeJarList = android.getBootClasspath()
+        } else {
+            runtimeJarList = plugin.getBootClasspath()
+        }
+        for (String runtimeJar : runtimeJarList) {
+            //给 proguard 添加 runtime
+            libraryjars(runtimeJar)
+        }
+    }
 }

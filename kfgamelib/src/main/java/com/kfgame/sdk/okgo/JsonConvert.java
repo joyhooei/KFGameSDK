@@ -18,11 +18,7 @@ package com.kfgame.sdk.okgo;
 import com.google.gson.stream.JsonReader;
 
 import com.kfgame.sdk.model.KFGameResponse;
-//import com.lzy.demo.model.SimpleResponse;
-//import com.lzy.demo.utils.Convert;
 import com.kfgame.sdk.model.SimpleResponse;
-import com.kfgame.sdk.okgo.Convert;
-import com.kfgame.sdk.util.LogUtil;
 import com.lzy.okgo.convert.Converter;
 
 import org.json.JSONArray;
@@ -34,15 +30,6 @@ import java.lang.reflect.Type;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * ================================================
- * 作    者：jeasonlzy（廖子尧）Github地址：https://github.com/jeasonlzy
- * 版    本：1.0
- * 创建日期：16/9/11
- * 描    述：
- * 修订历史：
- * ================================================
- */
 public class JsonConvert<T> implements Converter<T> {
 
     private Type type;
@@ -62,12 +49,10 @@ public class JsonConvert<T> implements Converter<T> {
     /**
      * 该方法是子线程处理，不能做ui相关的工作
      * 主要作用是解析网络返回的 response 对象，生成onSuccess回调中需要的数据对象
-     * 这里的解析工作不同的业务逻辑基本都不一样,所以需要自己实现,以下给出的时模板代码,实际使用根据需要修改
+     * 这里的解析工作不同的业务逻辑基本都不一样,所以需要自己实现,实际使用根据需要修改
      */
     @Override
     public T convertResponse(Response response) throws Throwable {
-
-        // 如果你对这里的代码原理不清楚，可以看这里的详细原理说明: https://github.com/jeasonlzy/okhttp-OkGo/wiki/JsonCallback
         if (type == null) {
             if (clazz == null) {
                 // 如果没有通过构造函数传进来，就自动解析父类泛型的真实类型（有局限性，继承后就无法解析到）

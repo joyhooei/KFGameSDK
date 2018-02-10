@@ -1,8 +1,12 @@
 package com.kfgame.sdk.okgo.callback;
 
+import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.util.MD5Utils;
 import com.lzy.okgo.model.HttpParams;
+import com.lzy.okgo.request.base.BodyRequest;
 import com.lzy.okgo.request.base.Request;
+
+import org.json.JSONObject;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,17 +23,19 @@ public abstract class EncryptCallback<T> extends JsonCallback<T> {
     @Override
     public void onStart(Request<T, ? extends Request> request) {
         super.onStart(request);
-        //以下是示例加密代码，根据自己的业务需求和服务器的配合，算法自行决定，这里只是demo，不能用于商业项目
+        //以下加密代码，根据业务需求和服务器的配合，算法自行决定
         sign(request.getParams());
+
+        JSONObject jsonObject = new JSONObject(request.getParams().urlParamsMap);
+        request.removeAllParams();
+        request.params("","");
+//        request.upJson(jsonObject);
     }
 
     /**
-     * 针对URL进行签名，关于这几个参数的作用，详细请看
-     * http://www.cnblogs.com/bestzrz/archive/2011/09/03/2164620.html
+     * 针对URL进行签名
      */
     private void sign(HttpParams params) {
-        params.put("nonce", getRndStr(6 + RANDOM.nextInt(8)));
-        params.put("timestamp", "" + (System.currentTimeMillis() / 1000L));
         StringBuilder sb = new StringBuilder();
         Map<String, String> map = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : params.urlParamsMap.entrySet()) {
@@ -38,20 +44,10 @@ public abstract class EncryptCallback<T> extends JsonCallback<T> {
         for (Map.Entry<String, String> entry : getSortedMapByKey(map).entrySet()) {
             sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
-        sb.delete(sb.length() - 1, sb.length());
+//        sb.delete(sb.length() - 1, sb.length());
+        sb.append(Config.encodeKey);
         String sign = MD5Utils.encode(sb.toString());
         params.put("sign", sign);
-    }
-
-    /** 获取随机数 */
-    private String getRndStr(int length) {
-        StringBuilder sb = new StringBuilder();
-        char ch;
-        for (int i = 0; i < length; i++) {
-            ch = CHARS.charAt(RANDOM.nextInt(CHARS.length()));
-            sb.append(ch);
-        }
-        return sb.toString();
     }
 
     /** 按照key的自然顺序进行排序，并返回 */

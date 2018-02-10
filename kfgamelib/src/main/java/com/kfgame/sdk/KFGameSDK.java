@@ -11,8 +11,6 @@ import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.dialog.AccountDialog;
 import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.request.SDKInit;
-import com.kfgame.sdk.util.AppSysUtil;
-import com.kfgame.sdk.util.DeviceUtils;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.lzy.okgo.OkGo;
@@ -22,12 +20,9 @@ import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
-import com.lzy.okgo.model.HttpHeaders;
-import com.lzy.okgo.model.HttpParams;
 
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -142,7 +137,7 @@ public class KFGameSDK {
          */
         SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";//
-//                req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
+//      req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
         req.state = "wechat_sdk_微信登录";
         api.sendReq(req);
     }
@@ -203,7 +198,7 @@ public class KFGameSDK {
      * 防止控件被重复点击
      */
     private static long lastClickTime;
-    public synchronized static boolean isFastClick() {
+    private synchronized static boolean isFastClick() {
         long time = System.currentTimeMillis();
         if ( time - lastClickTime < 1500) {
             return true;
@@ -220,13 +215,9 @@ public class KFGameSDK {
         //统一请求头部字段
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.put("udid", DeviceUtils.getUniqueId(application));    //header不支持中文，不允许有特殊字符
-//        headers.put("androidId", DeviceUtils.getAndroidID(application) + "");
-////        headers.put("phoneModule", AppSysUtil.getSysModel() + "");
 //        headers.put("platform", "android");
 //        HttpParams params = new HttpParams();
 //        params.put("phoneModule", AppSysUtil.getSysModel() + "");    // 获取手机型号 //param支持中文,直接传,不要自己编码
-//
-//        LogUtil.e("UniqueId:" + DeviceUtils.getUniqueId(application) + " AndroidID:" + DeviceUtils.getAndroidID(application) + "");
         //----------------------------------------------------------------------------------------//
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

@@ -12,7 +12,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="10dp" >
+        android:paddingTop="15dp" >
 
         <com.kfgame.sdk.view.WarningLinearLayout
             android:id="@+id/account_layout"
@@ -51,7 +51,7 @@
                 android:id="@+id/passwd_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/kfgame_white_border_bg_transparent"
                 android:orientation="horizontal" >
 
@@ -83,7 +83,7 @@
             android:id="@+id/tv_account_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/kfgame_selector_btn_orange_round"
             android:gravity="center"
             android:padding="8dp"
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal" >
 
             <TextView

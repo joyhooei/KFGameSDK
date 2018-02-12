@@ -66,7 +66,7 @@ public class SDKInit {
             LogUtil.e("Tobin getKey: " + entry.getKey() + " getValue: " + entry.getValue());
         }
 
-        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + Config.encodeKey);
+        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + "+key");
         String sign = Encryption.md5Crypt(signpre + Config.encodeKey);
         LogUtil.e("Tobin: sign md5Crypt: " + sign);
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -40,6 +41,7 @@ public class PhoneRegisterView extends BaseLinearLayout {
 	private TextView tv_policy_agreement;
     private ImageView iv_password_visible;
 
+    private boolean isChecked = false;
 
     @Override
 	public void initView() {
@@ -67,8 +69,15 @@ public class PhoneRegisterView extends BaseLinearLayout {
         iv_password_visible.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                passwordEdit.setInputType();
-            }
+                if(!isChecked){
+                    //选择状态 显示明文--设置为可见的密码
+                    passwordEdit.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    isChecked = true;
+                } else {
+                    //默认状态显示密码--设置文本 要一起写才能起作用 InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    passwordEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    isChecked = false;
+                }            }
         });
 
         // 注册按钮点击事件
@@ -92,8 +101,8 @@ public class PhoneRegisterView extends BaseLinearLayout {
 							: "密码必须由6-13位数字和字母组成");
 					return;
 				}
-
-//				requestApi(SdkHttpRequest.registerRequest(phoneAccount, password , verificationCode));
+                setHttpCallback();
+				AccountRequest.getInstance().phoneRegister(phoneAccount, password , verificationCode);
 			}
 		});
 
@@ -149,6 +158,7 @@ public class PhoneRegisterView extends BaseLinearLayout {
 		PhoneRegisterView view = (PhoneRegisterView) LayoutInflater.from(ctx)
 				.inflate(ResourceUtil.getLayoutId("kfgame_sdk_view_register_phone"), null);
 		view.initView();
+
 		return view;
 	}
 

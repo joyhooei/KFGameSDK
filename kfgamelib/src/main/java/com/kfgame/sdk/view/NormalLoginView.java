@@ -8,19 +8,20 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.kfgame.sdk.KFGameSDK;
-import com.kfgame.sdk.pojo.KFGameUser;
+import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.request.AccountRequest;
+import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
+import com.kfgame.sdk.util.SPUtils;
 import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
 
 public class NormalLoginView extends BaseLinearLayout {
-	private boolean canQuickLogin;
-	private KFGameUser user;
 
+    private String spUserName;
+    private boolean isAutoLogin;
+    private String spPassWord;
 	public NormalLoginView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 	}
@@ -36,9 +37,6 @@ public class NormalLoginView extends BaseLinearLayout {
 	private EditText edt_account;
 	private EditText edt_password;
 	private SdkTipsTextView accountLogin;
-
-    private ImageView iv_qqLogin;
-    private ImageView iv_wxLogin;
 
 	@Override
 	public void initView() {
@@ -56,8 +54,8 @@ public class NormalLoginView extends BaseLinearLayout {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				String str = edt_account.getText().toString().trim();
-				if (canQuickLogin && !user.getEmail().equals(str)) {
-					canQuickLogin = false;
+				if (Config.isAotuLogin && !spUserName.equals(str)) {
+					Config.isAotuLogin = false;
 					edt_password.setText("");
 				}
 			}
@@ -74,8 +72,8 @@ public class NormalLoginView extends BaseLinearLayout {
 		edt_password.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus && canQuickLogin) {
-					canQuickLogin = false;
+				if (hasFocus && Config.isAotuLogin) {
+					Config.isAotuLogin = false;
 					edt_password.setText("");
 				}
 			}
@@ -85,10 +83,7 @@ public class NormalLoginView extends BaseLinearLayout {
 		accountLogin.setOnClickListener(new BaseOnClickListener() {
 			@Override
 			public void onBaseClick(View v) {
-				if (canQuickLogin && user != null) {
-//					requestApi(SdkHttpRequest.eLoginRequest(user.getUserid(), user.getToken()));
-					return;
-				}
+
 				String username = edt_account.getText().toString().trim();
 				if (!checkAccount(username)) {
 					return;
@@ -98,9 +93,15 @@ public class NormalLoginView extends BaseLinearLayout {
 					return;
 				}
 
+				setHttpCallback();
 				// 发送登录请求
-                AccountRequest.getInstance().normalLogin(username, password);
 
+                if (isAutoLogin){
+                    spPassWord =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_KEY,"");
+                    AccountRequest.getInstance().normalLogin(username, spPassWord);
+                }else {
+                    AccountRequest.getInstance().normalLogin(username, password);
+                }
 			}
 		});
 
@@ -121,15 +122,20 @@ public class NormalLoginView extends BaseLinearLayout {
 			}
 		});
 
-		// 游客试玩
-		findViewById(findId("tv_quick_login")).setOnClickListener(new BaseOnClickListener() {
-			@Override
-			public void onBaseClick(View v) {
-				Toast.makeText(KFGameSDK.getInstance().getActivity(),"游客试玩",Toast.LENGTH_SHORT).show();
-//				requestApi(SdkHttpRequest.quickLoginRequest());
-			}
-		});
+        spUserName =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_USERNAME_KEY, "");
 
+        isAutoLogin = (Boolean) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, false);
+
+        int length =(int) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, 6);
+        String lengthStr = "";
+        for (int i = 0; i < length;  i++){
+            lengthStr += "*";
+        }
+        LogUtil.e("Tobin" + spUserName + " passwoed: " +  spPassWord);
+        if (isAutoLogin && !"".equals(spUserName)) {
+            edt_account.setText(spUserName);
+            edt_password.setText(lengthStr);
+        }
 
 	}
 
@@ -177,6 +183,6 @@ public class NormalLoginView extends BaseLinearLayout {
 
 	@Override
 	public String getViewTitle() {
-		return "账号登陆";
+		return "手机登陆";
 	}
 }

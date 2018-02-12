@@ -10,5 +10,5 @@ public interface SDKLoginListener {
 
 	void onLoginCancel();
 
-	void onLoginError();
+	void onLoginFail(String msg);
 }

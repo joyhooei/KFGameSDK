@@ -28,22 +28,23 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onLoginSuccess(KFGameUser user) {
-                        Log.e("Tobin","onLoginSuccess");
+                        Log.e("Tobin","MainActivity onLoginSuccess" + " Token:" + user.getToken() + " Uid" + user.getUid());
                     }
 
                     @Override
                     public void onLogoutSuccess() {
-                        Log.e("Tobin","onLogoutSuccess");
+                        Log.e("Tobin","MainActivity onLogoutSuccess");
                     }
 
                     @Override
                     public void onLoginCancel() {
-                        Log.e("Tobin","onLoginCancel");
+                        Log.e("Tobin","MainActivityonLoginCancel");
                     }
 
                     @Override
-                    public void onLoginError() {
-                        Log.e("Tobin","onLoginError");
+                    public void onLoginFail(String msg) {
+                        if (msg != null)
+                            Log.e("Tobin","MainActivity onLoginFail" + msg);
 
                     }
                 });

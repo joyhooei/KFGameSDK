@@ -34,14 +34,15 @@ public class Config {
 
 
     public static String SEND_IDENTIFY_CODE = URL_BASE_V1 + "account/sendSmsCode";
-    public static String NORMAL_LOGIN = URL_BASE_V1 + "account/sendSmsCode";
-    public static String PHONE_REGISTER = URL_BASE_V1 + "account/sendSmsCode";
-    public static String FORGET_PASSWORD = URL_BASE_V1 + "account/sendSmsCode";
+    public static String NORMAL_LOGIN = URL_BASE_V1 + "account/mobileLogin";
+    public static String PHONE_REGISTER = URL_BASE_V1 + "account/mobileRegister";
+    public static String MODIFY_PASSWORD = URL_BASE_V1 + "account/resetPassword";
     public static String QUICK_LOGIN = URL_BASE_V1 + "account/sendSmsCode";
     public static String THIRD_LOGIN = URL_BASE_V1 + "account/sendSmsCode";
 
     public static final String URL_GANK_BASE = "http://gank.io/api/data/Android/10/1";
 
     public static final String encodeKey = "1";
+    public static boolean isAotuLogin = false;
 
 }

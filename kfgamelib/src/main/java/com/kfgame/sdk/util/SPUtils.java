@@ -18,6 +18,12 @@ public class SPUtils
      */
     public static final String FILE_NAME = "KFGameSDKData";
 
+    //
+    public static final String LOGIN_PASSWORD_KEY = "login_password";
+    public static final String LOGIN_USERNAME_KEY = "login_username";
+    public static final String LOGIN_ISAUTO_KEY = "login_isauto";
+    public static final String LOGIN_PASSWORD_LENGTH_KEY = "login_username_length";
+
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
      *
@@ -122,8 +128,7 @@ public class SPUtils
      */
     public static boolean contains(Context context, String key)
     {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
-                Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         return sp.contains(key);
     }
 
@@ -135,15 +140,12 @@ public class SPUtils
      */
     public static Map<String, ?> getAll(Context context)
     {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
-                Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         return sp.getAll();
     }
 
     /**
      * 创建一个解决SharedPreferencesCompat.apply方法的一个兼容类
-     *
-     * @author zhy
      *
      */
     private static class SharedPreferencesCompat
@@ -158,12 +160,11 @@ public class SPUtils
         @SuppressWarnings({ "unchecked", "rawtypes" })
         private static Method findApplyMethod()
         {
-            try
-            {
+            try {
                 Class clz = SharedPreferences.Editor.class;
                 return clz.getMethod("apply");
-            } catch (NoSuchMethodException e)
-            {
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
             }
 
             return null;
@@ -176,19 +177,17 @@ public class SPUtils
          */
         public static void apply(SharedPreferences.Editor editor)
         {
-            try
-            {
-                if (sApplyMethod != null)
-                {
+            try {
+                if (sApplyMethod != null) {
                     sApplyMethod.invoke(editor);
                     return;
                 }
-            } catch (IllegalArgumentException e)
-            {
-            } catch (IllegalAccessException e)
-            {
-            } catch (InvocationTargetException e)
-            {
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
             editor.commit();
         }

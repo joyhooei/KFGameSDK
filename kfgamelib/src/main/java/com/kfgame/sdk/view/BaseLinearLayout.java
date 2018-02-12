@@ -17,6 +17,8 @@ import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.pojo.KFGameUser;
 import com.kfgame.sdk.pojo.ThirdType;
+import com.kfgame.sdk.request.AccountRequest;
+import com.kfgame.sdk.request.listener.HttpEventListener;
 import com.kfgame.sdk.util.NetCheckUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.view.viewinterface.BaseSdkView;
@@ -26,18 +28,35 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
+public class BaseLinearLayout extends LinearLayout implements BaseSdkView,HttpEventListener {
+    @Override
+    public void requestDidSuccess() {
 
-	public BaseLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    }
+
+    @Override
+    public void requestDidStart() {
+
+    }
+
+    @Override
+    public void requestDidFailed(String msg) {
+        showError(msg);
+    }
+
+    public BaseLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+
 	}
 
 	public BaseLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
 	}
 
 	public BaseLinearLayout(Context context) {
 		super(context);
+
 	}
 
 	public LayoutParams getSdkViewLayoutParams() {
@@ -222,6 +241,10 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 //		request.asyncStart();
 //	}
 
+    public void setHttpCallback() {
+        AccountRequest.getInstance().setHttpEventListener(this);
+    }
+
 	@Override
 	public boolean isMenuEnable() {
 		return false;
@@ -261,6 +284,8 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 		}
 	}
 
+
+
 	private static void setLoginToday(Context ctx) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String date = dateFormat.format(new Date());
@@ -284,4 +309,5 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView {
 //		}
 		setLoginToday(getContext());
 	}
+
 }

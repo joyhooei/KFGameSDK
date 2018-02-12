@@ -1,17 +1,20 @@
 package com.kfgame.sdk.request;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.common.Encryption;
+import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.model.KFGameResponse;
 import com.kfgame.sdk.model.SimpleResponse;
 import com.kfgame.sdk.okgo.callback.JsonCallback;
-import com.kfgame.sdk.pojo.InitModel;
 import com.kfgame.sdk.pojo.KFGameUser;
+import com.kfgame.sdk.request.listener.HttpEventListener;
 import com.kfgame.sdk.util.DeviceUtils;
 import com.kfgame.sdk.util.LogUtil;
+import com.kfgame.sdk.util.SPUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.model.Response;
@@ -43,69 +46,196 @@ public class AccountRequest {
         return ourInstance;
     }
 
-    public void normalLogin(String userName, String passWord) {
+    public void normalLogin(String userName, final String passWord) {
+        Context context = KFGameSDK.getInstance().getActivity();
         TreeMap<String,String> paraMap = new TreeMap<>();
         paraMap.put("appId",Config.APP_ID);
         paraMap.put("channelId",Config.CHANNEL_ID);
-        paraMap.put("mobile", userName);
-        paraMap.put("passWord", passWord);
-        paraMap.put("udid",DeviceUtils.getUniqueId(KFGameSDK.getInstance().getActivity()));
+        paraMap.put("userName",userName);
+        paraMap.put("password", Encryption.md5Crypt(passWord));
+        paraMap.put("udid",DeviceUtils.getUniqueId(context));
         paraMap.put("timestamp", System.currentTimeMillis() / 1000 + "");
         paraMap.put("version",Config.API_VERSION);
 
         String signpre = "";
         PostRequest postRequest = OkGo.<KFGameResponse<KFGameUser>>post(Config.NORMAL_LOGIN);
-        postRequest.cacheMode(CacheMode.NO_CACHE);
+
         for (Map.Entry<String, String> entry: paraMap.entrySet()) {
             signpre +=entry.getKey() + "=" + entry.getValue() + "&";
             postRequest.params(entry.getKey(),entry.getValue());
             LogUtil.e("Tobin getKey: " + entry.getKey() + " getValue: " + entry.getValue());
         }
 
-        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + Config.encodeKey);
+        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + "+key");
         String sign = Encryption.md5Crypt(signpre + Config.encodeKey);
         LogUtil.e("Tobin: sign md5Crypt: " + sign);
 
         paraMap.put("sign",sign);
 
         JSONObject jsons = new JSONObject(paraMap);
-
         postRequest.upJson(jsons);
-
-        postRequest.tag("initSDK");
+        postRequest.tag("normalLogin");
         postRequest.execute(new JsonCallback<KFGameResponse<KFGameUser>>() {
             @Override
             public void onStart(Request<KFGameResponse<KFGameUser>, ? extends Request> request) {
-                LogUtil.e("Tobin: sdkInit onStart: ");
+                LogUtil.e("Tobin: normalLogin onStart: ");
+                SdkDialogViewManager.showLoadingView();
             }
 
             @Override
             public void onError(Response<KFGameResponse<KFGameUser>> response) {
                 String error = response.getException().getMessage();
-                LogUtil.e("Tobin onError" + error);
-                LogUtil.e("Tobin: sdkInit onError: ");
-                Toast.makeText(KFGameSDK.getInstance().getActivity(),"SDK初始化: " + error,Toast.LENGTH_SHORT).show();
+                LogUtil.e("Tobin normalLogin onError" + error);
+                LogUtil.e("Tobin: normalLogin onError: ");
+                getHttpEventListener().requestDidFailed(error);
             }
 
             @Override
             public void onFinish() {
-                LogUtil.e("Tobin: sdkInit onFinish: ");
+                LogUtil.e("Tobin: normalLogin onFinish: ");
+                SdkDialogViewManager.hideLoadingView();
             }
 
             @Override
             public void onSuccess(Response<KFGameResponse<KFGameUser>> response) {
-                LogUtil.e("Tobin: sdkInit onSuccess: ");
+                kfGameUser = response.body().data;
+                LogUtil.e("Tobin: normalLogin onSuccess: " + kfGameUser.toString() + "　Uid：" +kfGameUser.getUid() + " Token: " + kfGameUser.getToken());
+                KFGameSDK.getInstance().getSDKLoginListener().onLoginSuccess(kfGameUser);
+                SdkDialogViewManager.dialogDismiss();
+
+                Config.isAotuLogin = true;
+                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_USERNAME_KEY,"" + kfGameUser.getUserName());
+                LogUtil.e("Tobin SPUtils save username " + kfGameUser.getUserName());
+                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, true);
+                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, passWord.length());
             }
         });
 
     }
 
     public void modifyPassword(String phoneNumber, String passWord, String verificationCode) {
+        Context context = KFGameSDK.getInstance().getActivity();
+        TreeMap<String,String> paraMap = new TreeMap<>();
+        paraMap.put("appId",Config.APP_ID);
+        paraMap.put("channelId",Config.CHANNEL_ID);
+        paraMap.put("mobile",phoneNumber);
+        paraMap.put("newPwd", Encryption.md5Crypt(passWord));
+        paraMap.put("smsCode",verificationCode);
+        paraMap.put("udid",DeviceUtils.getUniqueId(context));
+        paraMap.put("timestamp", System.currentTimeMillis() / 1000 + "");
+        paraMap.put("version",Config.API_VERSION);
+
+        String signpre = "";
+        PostRequest postRequest = OkGo.<SimpleResponse>post(Config.MODIFY_PASSWORD);
+
+        for (Map.Entry<String, String> entry: paraMap.entrySet()) {
+            signpre +=entry.getKey() + "=" + entry.getValue() + "&";
+            postRequest.params(entry.getKey(),entry.getValue());
+            LogUtil.e("Tobin getKey: " + entry.getKey() + " getValue: " + entry.getValue());
+        }
+
+        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + "+key");
+        String sign = Encryption.md5Crypt(signpre + Config.encodeKey);
+        LogUtil.e("Tobin: sign md5Crypt: " + sign);
+
+        paraMap.put("sign",sign);
+
+        JSONObject jsons = new JSONObject(paraMap);
+        postRequest.upJson(jsons);
+        postRequest.tag("modifyPassword");
+        postRequest.execute(new JsonCallback<SimpleResponse>() {
+            @Override
+            public void onStart(Request<SimpleResponse, ? extends Request> request) {
+                LogUtil.e("Tobin: modifyPassword onStart: ");
+                SdkDialogViewManager.showLoadingView();
+            }
+
+            @Override
+            public void onError(Response<SimpleResponse> response) {
+                String error = response.getException().getMessage();
+                LogUtil.e("Tobin onError" + error);
+                LogUtil.e("Tobin: modifyPassword onError: ");
+                getHttpEventListener().requestDidFailed(error);
+            }
+
+            @Override
+            public void onFinish() {
+                LogUtil.e("Tobin: modifyPassword onFinish: ");
+                SdkDialogViewManager.hideLoadingView();
+
+            }
+
+            @Override
+            public void onSuccess(Response<SimpleResponse> response) {
+                getHttpEventListener().requestDidSuccess();
+                LogUtil.e("Tobin: modifyPassword onSuccess: ");
+                SdkDialogViewManager.doBackPressed();
+            }
+        });
 
     }
 
     public void phoneRegister(String phoneNumber, String passWord, String verificationCode) {
+        Context context = KFGameSDK.getInstance().getActivity();
+        TreeMap<String,String> paraMap = new TreeMap<>();
+        paraMap.put("appId",Config.APP_ID);
+        paraMap.put("channelId",Config.CHANNEL_ID);
+        paraMap.put("mobile",phoneNumber);
+        paraMap.put("password", Encryption.md5Crypt(passWord));
+        paraMap.put("smsCode",verificationCode);
+        paraMap.put("udid",DeviceUtils.getUniqueId(context));
+        paraMap.put("timestamp", System.currentTimeMillis() / 1000 + "");
+        paraMap.put("version",Config.API_VERSION);
 
+        String signpre = "";
+        PostRequest postRequest = OkGo.<SimpleResponse>post(Config.PHONE_REGISTER);
+
+        for (Map.Entry<String, String> entry: paraMap.entrySet()) {
+            signpre +=entry.getKey() + "=" + entry.getValue() + "&";
+            postRequest.params(entry.getKey(),entry.getValue());
+            LogUtil.e("Tobin getKey: " + entry.getKey() + " getValue: " + entry.getValue());
+        }
+
+        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + "+key");
+        String sign = Encryption.md5Crypt(signpre + Config.encodeKey);
+        LogUtil.e("Tobin: sign md5Crypt: " + sign);
+
+        paraMap.put("sign",sign);
+
+        JSONObject jsons = new JSONObject(paraMap);
+        postRequest.upJson(jsons);
+        postRequest.tag("phoneRegister");
+        postRequest.execute(new JsonCallback<KFGameResponse<KFGameUser>>() {
+            @Override
+            public void onStart(Request<KFGameResponse<KFGameUser>, ? extends Request> request) {
+                LogUtil.e("Tobin: phoneRegister onStart: ");
+                SdkDialogViewManager.showLoadingView();
+            }
+
+            @Override
+            public void onError(Response<KFGameResponse<KFGameUser>> response) {
+                String error = response.getException().getMessage();
+                LogUtil.e("Tobin onError" + error);
+                LogUtil.e("Tobin: phoneRegister onError: ");
+                getHttpEventListener().requestDidFailed(error);
+                KFGameSDK.getInstance().getSDKLoginListener().onLoginFail(error);
+                SdkDialogViewManager.dialogDismiss();
+            }
+
+            @Override
+            public void onFinish() {
+                LogUtil.e("Tobin: phoneRegister onFinish: ");
+                SdkDialogViewManager.hideLoadingView();
+            }
+
+            @Override
+            public void onSuccess(Response<KFGameResponse<KFGameUser>> response) {
+                kfGameUser = response.body().data;
+                KFGameSDK.getInstance().getSDKLoginListener().onLoginSuccess(kfGameUser);
+                LogUtil.e("Tobin: phoneRegister onSuccess: " + kfGameUser.toString() +kfGameUser.getUid() + kfGameUser.getToken());
+                SdkDialogViewManager.dialogDismiss();
+            }
+        });
     }
 
     //send_identifying_code
@@ -127,7 +257,7 @@ public class AccountRequest {
             LogUtil.e("Tobin getKey: " + entry.getKey() + " getValue: " + entry.getValue());
         }
 
-        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + Config.encodeKey);
+        LogUtil.e("Tobin: signpre md5Crypt: " + signpre + "+key");
         String sign = Encryption.md5Crypt(signpre + Config.encodeKey);
         LogUtil.e("Tobin: sign md5Crypt: " + sign);
 
@@ -137,7 +267,7 @@ public class AccountRequest {
 
         postRequest.upJson(jsons);
 
-        postRequest.tag("initSDK");
+        postRequest.tag("requestSendIdentifyCode");
         postRequest.execute(new JsonCallback<SimpleResponse>() {
             @Override
             public void onStart(Request<SimpleResponse, ? extends Request> request) {
@@ -147,23 +277,30 @@ public class AccountRequest {
             @Override
             public void onError(Response<SimpleResponse> response) {
                 String error = response.getException().getMessage();
-                LogUtil.e("Tobin onError" + error);
-                LogUtil.e("Tobin: sdkInit onError: ");
-                Toast.makeText(KFGameSDK.getInstance().getActivity(),"SDK初始化: " + error,Toast.LENGTH_SHORT).show();
+                LogUtil.e("Tobin requestSendIdentifyCode onError" + error);
+                getHttpEventListener().requestDidFailed(error);
             }
 
             @Override
             public void onFinish() {
-                LogUtil.e("Tobin: sdkInit onFinish: ");
+                LogUtil.e("Tobin: requestSendIdentifyCode onFinish: ");
             }
 
             @Override
             public void onSuccess(Response<SimpleResponse> response) {
-                LogUtil.e("Tobin: sdkInit onSuccess: ");
+                LogUtil.e("Tobin: requestSendIdentifyCode onSuccess: ");
+                Toast.makeText(KFGameSDK.getInstance().getActivity(),"验证码发送成功", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private HttpEventListener httpEventListener;
+    public HttpEventListener getHttpEventListener() {
+        return httpEventListener;
+    }
 
+    public void setHttpEventListener(HttpEventListener httpEventListener) {
+        this.httpEventListener = httpEventListener;
+    }
 
 }

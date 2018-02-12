@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.kfgame.sdk.callback.SDKLoginListener;
@@ -47,7 +48,7 @@ public class KFGameSDK {
     private Context context;
     private Application application;
 
-
+    private Handler mainHandler;
 
     private static KFGameSDK ourInstance  = null;
 
@@ -90,7 +91,12 @@ public class KFGameSDK {
         checkSdkCallMethod();
 
         SDKInit.getInstance().sdkInit();
-
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainHandler = new Handler();
+            }
+        });
     }
 
     public void initSDK(Application application){
@@ -143,13 +149,11 @@ public class KFGameSDK {
     }
 
 
-
-
     public void sdkLogin(SDKLoginListener sdkLoginListener) {
         setGamaterSDKListener(sdkLoginListener);
 
         if (activity.isFinishing()) {
-            getSDKLoginListener().onLoginError();
+            getSDKLoginListener().onLoginFail("初始化失败");
             return;
         }
 
@@ -212,13 +216,6 @@ public class KFGameSDK {
             LogUtil.e("KFGame", "必须在Application中初始化");
             return;
         }
-        //统一请求头部字段
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.put("udid", DeviceUtils.getUniqueId(application));    //header不支持中文，不允许有特殊字符
-//        headers.put("platform", "android");
-//        HttpParams params = new HttpParams();
-//        params.put("phoneModule", AppSysUtil.getSysModel() + "");    // 获取手机型号 //param支持中文,直接传,不要自己编码
-        //----------------------------------------------------------------------------------------//
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //log相关
@@ -249,11 +246,10 @@ public class KFGameSDK {
         //方法四：使用bks证书和密码管理客户端证书（双向认证），使用预埋证书，校验服务端证书（自签名证书）
         //HttpsUtils.SSLParams sslParams4 = HttpsUtils.getSslSocketFactory(getAssets().open("xxx.bks"), "123456", getAssets().open("yyy.cer"));
         builder.sslSocketFactory(sslParams1.sSLSocketFactory, sslParams1.trustManager);
-        //配置https的域名匹配规则，详细看demo的初始化介绍，不需要就不要加入，使用不当会导致https握手失败
+        //配置https的域名匹配规则，不需要就不要加入，使用不当会导致https握手失败
 //        builder.hostnameVerifier(new SafeHostnameVerifier());
 
         // 其他统一的配置
-        // 详细说明看GitHub文档：https://github.com/jeasonlzy/
         OkGo.getInstance().init(application)                    //必须调用初始化
                 .setOkHttpClient(builder.build())                //建议设置OkHttpClient，不设置会使用默认的
                 .setCacheMode(CacheMode.NO_CACHE)               //全局统一缓存模式，默认不使用缓存，可以不传

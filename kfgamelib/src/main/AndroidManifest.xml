@@ -15,17 +15,17 @@
 
 
         <!--QQ登录配置 start-->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:noHistory="true"
-            android:launchMode="singleTask" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent******" />
-            </intent-filter>
-        </activity>
+        <!--<activity-->
+            <!--android:name="com.tencent.tauth.AuthActivity"-->
+            <!--android:noHistory="true"-->
+            <!--android:launchMode="singleTask" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <!--<data android:scheme="tencent******" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
         <!--SDK_V2.0引入了AssistActivity，开发者需在androidManifest.xml中注册。代码如下：-->
         <!--<activity android:name="com.tencent.connect.common.AssistActivity"-->

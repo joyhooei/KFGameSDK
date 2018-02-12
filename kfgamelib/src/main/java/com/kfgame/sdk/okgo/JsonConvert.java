@@ -19,6 +19,7 @@ import com.google.gson.stream.JsonReader;
 
 import com.kfgame.sdk.model.KFGameResponse;
 import com.kfgame.sdk.model.SimpleResponse;
+import com.kfgame.sdk.util.LogUtil;
 import com.lzy.okgo.convert.Converter;
 
 import org.json.JSONArray;
@@ -132,14 +133,14 @@ public class JsonConvert<T> implements Converter<T> {
                 response.close();
                 int status = kfGameResponse.status;
                 String msg = kfGameResponse.msg == null ? "" : kfGameResponse.msg;
-
+                LogUtil.e("Tobin response code " +response.code());
                 //服务器会和客户端约定一个数1表示成功，其余的表示失败
                 if (status == 1) {
                     //noinspection unchecked
                     return (T) kfGameResponse;
                 } else if (status == 0) {
                     throw new IllegalStateException("" + msg);
-                } else {
+                }else {
                     //直接将服务端的错误信息抛出，onError中可以获取
                     throw new IllegalStateException("错误代码：" + status + "，错误信息：" + kfGameResponse.msg);
                 }

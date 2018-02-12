@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kfgame.sdk.util.ResourceUtil;
+import com.kfgame.sdk.view.AutoLoginView;
 import com.kfgame.sdk.view.NormalLoginView;
 import com.kfgame.sdk.view.SdkSettingView;
 import com.kfgame.sdk.view.circularprogress.CircularProgressBar;
@@ -29,7 +30,7 @@ import com.kfgame.sdk.view.viewinterface.BaseSdkView;
  */
 public class AccountDialog extends Dialog {
     public enum ViewType {
-        Login, UpdateAccount, ChangePassword
+        AutoLogin, Login, UpdateAccount, ChangePassword
     }
 
     private Activity activity;
@@ -86,7 +87,12 @@ public class AccountDialog extends Dialog {
 
         progressView = findViewById(ResourceUtil.getId("progress_view"));
 
-        BaseSdkView sdkView = NormalLoginView.createView(getContext());
+        BaseSdkView sdkView;
+        if (type == ViewType.AutoLogin){
+            sdkView = AutoLoginView.createView(getContext());
+        }else{
+            sdkView = NormalLoginView.createView(getContext());
+        }
         containerView.addView((View) sdkView, sdkView.getSdkViewLayoutParams());
         updateView(sdkView);
 

@@ -23,6 +23,9 @@ import com.lzy.okgo.request.base.Request;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -52,7 +55,7 @@ public class AccountRequest {
         paraMap.put("appId",Config.APP_ID);
         paraMap.put("channelId",Config.CHANNEL_ID);
         paraMap.put("userName",userName);
-        paraMap.put("password", Encryption.md5Crypt(passWord));
+        paraMap.put("password", passWord);
         paraMap.put("udid",DeviceUtils.getUniqueId(context));
         paraMap.put("timestamp", System.currentTimeMillis() / 1000 + "");
         paraMap.put("version",Config.API_VERSION);
@@ -86,8 +89,12 @@ public class AccountRequest {
             public void onError(Response<KFGameResponse<KFGameUser>> response) {
                 String error = response.getException().getMessage();
                 LogUtil.e("Tobin normalLogin onError" + error);
-                LogUtil.e("Tobin: normalLogin onError: ");
-                getHttpEventListener().requestDidFailed(error);
+                LogUtil.e("Tobin: normalLogin onError: response code: " + response.code());
+                if (response.code() >= -1){
+                    getHttpEventListener().requestDidFailed("无法连接服务器");
+                }else {
+                    getHttpEventListener().requestDidFailed(error);
+                }
             }
 
             @Override
@@ -103,11 +110,23 @@ public class AccountRequest {
                 KFGameSDK.getInstance().getSDKLoginListener().onLoginSuccess(kfGameUser);
                 SdkDialogViewManager.dialogDismiss();
 
-                Config.isAotuLogin = true;
+                // 用户名
                 SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_USERNAME_KEY,"" + kfGameUser.getUserName());
+
+                // 密码
+                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_KEY,"" + passWord);
                 LogUtil.e("Tobin SPUtils save username " + kfGameUser.getUserName());
+
+                // 自动登录标记
                 SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, true);
-                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, passWord.length());
+                Config.isAotuLogin = true;
+
+                // 密码长度
+//                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, passWord.length());
+
+                //登陆时间
+                SimpleDateFormat time = new SimpleDateFormat("YYYY-MM-dd");
+                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_LOGIN_TIME_KEY, time.format(new Date()));
             }
         });
 
@@ -154,8 +173,12 @@ public class AccountRequest {
             public void onError(Response<SimpleResponse> response) {
                 String error = response.getException().getMessage();
                 LogUtil.e("Tobin onError" + error);
-                LogUtil.e("Tobin: modifyPassword onError: ");
-                getHttpEventListener().requestDidFailed(error);
+                LogUtil.e("Tobin: modifyPassword onError: response code: " + response.code());
+                if (response.code() >= 500){
+                    getHttpEventListener().requestDidFailed("服务器错误");
+                }else {
+                    getHttpEventListener().requestDidFailed(error);
+                }
             }
 
             @Override

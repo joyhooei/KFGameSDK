@@ -234,13 +234,6 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView,HttpEv
 		return ResourceUtil.getStringId(stringName);
 	}
 
-//	protected void requestApi(HttpRequest request) {
-//		if (request == null)
-//			return;
-//		request.setHttpEventListener(this);
-//		request.asyncStart();
-//	}
-
     public void setHttpCallback() {
         AccountRequest.getInstance().setHttpEventListener(this);
     }

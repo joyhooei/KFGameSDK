@@ -13,6 +13,8 @@ import com.kfgame.sdk.dialog.AccountDialog;
 import com.kfgame.sdk.request.SDKInit;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
+import com.kfgame.sdk.util.SPUtils;
+import com.kfgame.sdk.util.TimeUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -21,6 +23,8 @@ import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -88,6 +92,7 @@ public class KFGameSDK {
                 mainHandler = new Handler();
             }
         });
+        Config.isAotuLogin = (Boolean) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, false);
     }
 
     public void initSDK(Application application){
@@ -159,7 +164,17 @@ public class KFGameSDK {
             public void run() {
                 try {
                     LogUtil.d("Tobin AccountDialog");
-                    AccountDialog dialog = new AccountDialog(activity);
+
+                    SimpleDateFormat time = new SimpleDateFormat("YYYY-MM-dd");
+                    String dateStr = (String) SPUtils.get(getActivity(),SPUtils.LOGIN_LOGIN_TIME_KEY,time.format(new Date()));
+                    LogUtil.e("Tobin" + TimeUtil.getDays(time.format(new Date()), dateStr));
+                    AccountDialog dialog;
+                    if (TimeUtil.getDays(time.format(new Date()), dateStr) < 1L && Config.isAotuLogin){
+                        dialog = new AccountDialog(activity, AccountDialog.ViewType.AutoLogin);
+                    }else {
+                        dialog = new AccountDialog(activity);
+                    }
+
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
                 } catch (Exception e) {

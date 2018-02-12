@@ -23,6 +23,7 @@ public class SPUtils
     public static final String LOGIN_USERNAME_KEY = "login_username";
     public static final String LOGIN_ISAUTO_KEY = "login_isauto";
     public static final String LOGIN_PASSWORD_LENGTH_KEY = "login_username_length";
+    public static final String LOGIN_LOGIN_TIME_KEY = "login_time";
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法

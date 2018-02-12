@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.common.Config;
+import com.kfgame.sdk.common.Encryption;
 import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
@@ -97,10 +98,10 @@ public class NormalLoginView extends BaseLinearLayout {
 				// 发送登录请求
 
                 if (isAutoLogin){
-                    spPassWord =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_KEY,"");
+                    spPassWord =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_KEY,"1");
                     AccountRequest.getInstance().normalLogin(username, spPassWord);
                 }else {
-                    AccountRequest.getInstance().normalLogin(username, password);
+                    AccountRequest.getInstance().normalLogin(username, Encryption.md5Crypt(password));
                 }
 			}
 		});

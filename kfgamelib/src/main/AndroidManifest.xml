@@ -28,30 +28,30 @@
         </activity>
 
         <!--SDK_V2.0引入了AssistActivity，开发者需在androidManifest.xml中注册。代码如下：-->
-        <activity android:name="com.tencent.connect.common.AssistActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
-        <!--QQ登录配置 end-->
+        <!--<activity android:name="com.tencent.connect.common.AssistActivity"-->
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+            <!--android:configChanges="orientation|keyboardHidden|screenSize" />-->
+        <!--&lt;!&ndash;QQ登录配置 end&ndash;&gt;-->
 
-        <receiver
-            android:name="com.tencent.mm.sdk.plugin.MMPluginOAuth$Receiver"
-            android:permission="com.tencent.mm.oauth.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.tencent.mm.sdk.plugin.Intent.ACTION_RESPONSE" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name="com.tencent.mm.sdk.plugin.MMPluginOAuth$Receiver"-->
+            <!--android:permission="com.tencent.mm.oauth.permission.SEND" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.tencent.mm.sdk.plugin.Intent.ACTION_RESPONSE" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <receiver
-            android:name="com.tencent.mm.sdk.channel.MMessage$Receiver"
-            android:permission="com.tencent.mm.plugin.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.tencent.mm.sdk.channel.Intent.ACTION_MESSAGE" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name="com.tencent.mm.sdk.channel.MMessage$Receiver"-->
+            <!--android:permission="com.tencent.mm.plugin.permission.SEND" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.tencent.mm.sdk.channel.Intent.ACTION_MESSAGE" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
-        <activity android:name="com.kfgame.sdk.wx.KFGameWXEntryActivity"
-            android:exported="true">
-        </activity>
+        <!--<activity android:name="com.kfgame.sdk.wx.KFGameWXEntryActivity"-->
+            <!--android:exported="true">-->
+        <!--</activity>-->
 
     </application>
 

@@ -264,10 +264,10 @@ public class BaseLinearLayout extends LinearLayout implements BaseSdkView,HttpEv
 		if (NetCheckUtil.isNetworkStatus(getContext())) {
 			if (type == ThirdType.QQ) {
 //                Toast.makeText(KFGameSDK.getInstance().getActivity(),"QQ登陆",Toast.LENGTH_SHORT).show();
-                KFGameSDK.getInstance().QQLogin();
+//                KFGameSDK.getInstance().QQLogin();
 			} else if (type == ThirdType.wechat) {
                 Toast.makeText(KFGameSDK.getInstance().getActivity(),"微信登陆",Toast.LENGTH_SHORT).show();
-                KFGameSDK.getInstance().WeChatLogin();
+//                KFGameSDK.getInstance().WeChatLogin();
 
 			} else if (type == ThirdType.weibo) {
                 Toast.makeText(KFGameSDK.getInstance().getActivity(),"微博登陆",Toast.LENGTH_SHORT).show();

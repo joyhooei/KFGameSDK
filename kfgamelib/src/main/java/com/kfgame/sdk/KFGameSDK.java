@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.kfgame.sdk.callback.SDKLoginListener;
 import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.dialog.AccountDialog;
-import com.kfgame.sdk.dialog.SdkDialogViewManager;
 import com.kfgame.sdk.request.SDKInit;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
@@ -21,12 +20,6 @@ import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.SPCookieStore;
 import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
-
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.tauth.IUiListener;
-import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -81,8 +74,6 @@ public class KFGameSDK {
         this.sdkLoginListener = sdkLoginListener;
     }
 
-    private Tencent mTencent;   // QQ登陆相关
-    private IWXAPI api; // 微信登录相关
     public void initSDK(Activity activity,String APP_ID, String CHANNEL_ID){
         this.activity = activity;
         Config.APP_ID = APP_ID;
@@ -104,49 +95,51 @@ public class KFGameSDK {
         initOkGo();
     }
 
-    public IWXAPI getIWXAPI(){
-        return api;
-    }
-
-    public void QQLogin(){
-        if (!mTencent.isSessionValid())
-        {
-            //注销登录 mTencent.logout(this);
-            mTencent.login(getActivity(), "all", new IUiListener() {
-                @Override
-                public void onComplete(Object o) {
-                    LogUtil.e("" + o.toString());
-
-
-                    SdkDialogViewManager.dialogDismiss();
-                }
-
-                @Override
-                public void onError(UiError uiError) {
-
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-        }
-    }
-
-    public void WeChatLogin(){
-        /**
-         snsapi_base属于基础接口，若应用已拥有其它scope权限，则默认拥有snsapi_base的权限。
-         使用snsapi_base可以让移动端网页授权绕过跳转授权登录页请求用户授权的动作，
-         直接跳转第三方网页带上授权临时票据（code），但会使得用户已授权作用域（scope）仅为snsapi_base，
-         从而导致无法获取到需要用户授权才允许获得的数据和基础功能。
-         */
-        SendAuth.Req req = new SendAuth.Req();
-        req.scope = "snsapi_userinfo";//
-//      req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
-        req.state = "wechat_sdk_微信登录";
-        api.sendReq(req);
-    }
+//    private Tencent mTencent;   // QQ登陆相关
+//    private IWXAPI api; // 微信登录相关
+//    public IWXAPI getIWXAPI(){
+//        return api;
+//    }
+//
+//    public void QQLogin(){
+//        if (!mTencent.isSessionValid())
+//        {
+//            //注销登录 mTencent.logout(this);
+//            mTencent.login(getActivity(), "all", new IUiListener() {
+//                @Override
+//                public void onComplete(Object o) {
+//                    LogUtil.e("" + o.toString());
+//
+//
+//                    SdkDialogViewManager.dialogDismiss();
+//                }
+//
+//                @Override
+//                public void onError(UiError uiError) {
+//
+//                }
+//
+//                @Override
+//                public void onCancel() {
+//
+//                }
+//            });
+//        }
+//    }
+//
+//    public void WeChatLogin(){
+//        /**
+//         snsapi_base属于基础接口，若应用已拥有其它scope权限，则默认拥有snsapi_base的权限。
+//         使用snsapi_base可以让移动端网页授权绕过跳转授权登录页请求用户授权的动作，
+//         直接跳转第三方网页带上授权临时票据（code），但会使得用户已授权作用域（scope）仅为snsapi_base，
+//         从而导致无法获取到需要用户授权才允许获得的数据和基础功能。
+//         */
+//        SendAuth.Req req = new SendAuth.Req();
+//        req.scope = "snsapi_userinfo";//
+////      req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
+//        req.state = "wechat_sdk_微信登录";
+//        api.sendReq(req);
+//    }
 
 
     public void sdkLogin(SDKLoginListener sdkLoginListener) {

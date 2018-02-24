@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.common.Encryption;
+import com.kfgame.sdk.database.DBHelper;
 import com.kfgame.sdk.request.AccountRequest;
+import com.kfgame.sdk.util.DensityUtils;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.util.SPUtils;
@@ -34,7 +36,13 @@ public class NormalLoginView extends BaseLinearLayout {
     private boolean isAutoLogin;
     private String spPassWord;
 
-	private CustomPopWindow mListPopWindow;
+    private EditText edt_account;
+    private EditText edt_password;
+    private SdkTipsTextView accountLogin;
+    private ImageView iv_username_dropdown;
+    private WarningLinearLayout account_layout;
+
+    private DBHelper dbHelper;
 
 	public NormalLoginView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
@@ -48,35 +56,24 @@ public class NormalLoginView extends BaseLinearLayout {
 		super(context);
 	}
 
-	private EditText edt_account;
-	private EditText edt_password;
-	private SdkTipsTextView accountLogin;
-    private ImageView iv_username_dropdown;
-    private WarningLinearLayout account_layout;
-
     private void showPopListView(){
         View contentView = LayoutInflater.from(getContext()).inflate(ResourceUtil.getLayoutId("kfgame_sdk_view_pop_listview"),null);
 
         //处理popWindow 显示内容
         handleListView(contentView);
         //创建并显示popWindow
-        mListPopWindow= new CustomPopWindow.PopupWindowBuilder(getContext())
+        new CustomPopWindow.PopupWindowBuilder(getContext())
                 .setView(contentView)
                 .size(account_layout.getWidth(),ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
                 .create()
                 .showAsDropDown(account_layout,0,0);
-
-//        mListPopWindow.showAtLocation(contentView, Gravity.TOP | Gravity.START,0,0);
     }
 
     private void handleListView(View contentView){
-        MaxListView recyclerView = (MaxListView) contentView.findViewById(ResourceUtil.getId("lv_account"));
-        recyclerView.setListViewHeight(500);
-//        LinearLayoutManager manager = new LinearLayoutManager(context);
-//        manager.setOrientation(LinearLayoutManager.VERTICAL);
-//        recyclerView.setLayoutManager(manager);
+        MaxListView listView = (MaxListView) contentView.findViewById(ResourceUtil.getId("lv_account"));
+        listView.setListViewHeight(DensityUtils.dp2px(getContext(),150));
         MyAdapter adapter = new MyAdapter(getContext(), mockData());
-        recyclerView.setAdapter(adapter);
+        listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
@@ -91,6 +88,10 @@ public class NormalLoginView extends BaseLinearLayout {
     }
 
 
+    private void initLoginUserName() {
+        String[] usernames = dbHelper.queryAllUserName();
+
+    }
 
 
     @Override
@@ -189,7 +190,6 @@ public class NormalLoginView extends BaseLinearLayout {
         });
 
         spUserName =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_USERNAME_KEY, "");
-
         isAutoLogin = (Boolean) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, false);
 
         int length =(int) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, 6);

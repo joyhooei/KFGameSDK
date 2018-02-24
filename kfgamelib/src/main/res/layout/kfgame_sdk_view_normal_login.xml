@@ -41,7 +41,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
-                android:textSize="14dp" />
+                android:textSize="12dp" />
 
 			<ImageView
 				android:id="@+id/iv_username_dropdown"
@@ -85,7 +85,7 @@
                     android:maxLines="1"
                     android:textColor="@android:color/black"
                     android:textColorHint="#909090"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
             </com.kfgame.sdk.view.WarningLinearLayout>
 
             <com.kfgame.sdk.view.SdkTipsTextView

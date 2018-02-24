@@ -1,5 +1,10 @@
 package com.kfgame.sdk.pojo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
+
 /**
  * Created by Tobin on 2018/1/29.
  */
@@ -77,4 +82,6 @@ public class KFGameUser {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
+
+
 }

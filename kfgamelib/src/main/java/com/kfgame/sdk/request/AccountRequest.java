@@ -121,9 +121,6 @@ public class AccountRequest {
                 SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, true);
                 Config.isAotuLogin = true;
 
-                // 密码长度
-//                SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, passWord.length());
-
                 //登陆时间
                 SimpleDateFormat time = new SimpleDateFormat("YYYY-MM-dd");
                 SPUtils.put(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_LOGIN_TIME_KEY, time.format(new Date()));

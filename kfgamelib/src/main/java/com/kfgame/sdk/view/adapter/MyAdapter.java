@@ -53,7 +53,7 @@ public class MyAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final int selectID = position;
         ListItemView listItemView = null;
         if (convertView == null) {
@@ -74,14 +74,16 @@ public class MyAdapter extends BaseAdapter {
         listItemView.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "这是第" + (selectID + 1) + "条item", Toast.LENGTH_SHORT).show();
+
+                listItems.remove(position);
+                notifyDataSetChanged();
             }
         });
 
         listItemView.info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(context, "这是第" + (selectID + 1) + "条item", Toast.LENGTH_SHORT).show();
             }
         });
 

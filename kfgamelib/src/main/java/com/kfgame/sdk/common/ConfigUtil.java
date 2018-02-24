@@ -1,11 +1,8 @@
 package com.kfgame.sdk.common;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.kfgame.sdk.KFGameSDK;
-import com.kfgame.sdk.util.LogUtil;
-import com.kfgame.sdk.util.SPUtil;
 
 /**
  * Created by Tobin on 2018/2/6.

@@ -22,15 +22,16 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:padding="5dp"
                 android:src="@drawable/kfgame_icon_account" />
 
             <EditText
                 android:id="@+id/edt_phone_account"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+				android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="请输入账号"
@@ -41,6 +42,16 @@
                 android:textColor="@android:color/black"
                 android:textColorHint="#909090"
                 android:textSize="14dp" />
+
+			<ImageView
+				android:id="@+id/iv_username_dropdown"
+				android:layout_width="30dp"
+				android:layout_height="30dp"
+				android:layout_gravity="center"
+				android:scaleType="fitCenter"
+				android:padding="5dp"
+				android:src="@drawable/kfgame_account_list_arrow" />
+
         </com.kfgame.sdk.view.WarningLinearLayout>
 
         <RelativeLayout
@@ -56,15 +67,15 @@
                 android:orientation="horizontal" >
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:padding="5dp"
                     android:src="@drawable/kfgame_icon_password" />
 
                 <EditText
                     android:id="@+id/edt_password"
                     android:layout_width="match_parent"
-                    android:layout_height="36dp"
+                    android:layout_height="30dp"
                     android:background="@android:color/transparent"
                     android:gravity="center_vertical"
                     android:hint="请输入密码"
@@ -77,25 +88,37 @@
                     android:textSize="14dp" />
             </com.kfgame.sdk.view.WarningLinearLayout>
 
-        </RelativeLayout>
+            <com.kfgame.sdk.view.SdkTipsTextView
+                android:id="@+id/tv_account_login"
+                android:layout_below="@id/passwd_layout"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/kfgame_selector_btn_orange_round"
+                android:gravity="center"
+                android:text="登陆"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
 
-        <com.kfgame.sdk.view.SdkTipsTextView
-            android:id="@+id/tv_account_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/kfgame_selector_btn_orange_round"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="登陆"
-            android:textColor="@android:color/white"
-            android:textSize="16dp" />
+            <LinearLayout
+                android:id="@+id/ll_account_list"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:visibility="gone">
+                <ListView
+                    android:id="@+id/lv_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </ListView>
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
             <TextView
@@ -126,7 +149,7 @@
 				android:layout_marginRight="4dp"
 				android:text="\u003C\u003C 忘记密码"
 				android:textColor="@android:color/black"
-				android:textSize="14dp" />
+				android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -159,7 +182,7 @@
 	                android:gravity="center"
 	                android:text="手机注册 \u003E\u003E"
 	                android:textColor="@android:color/black"
-	                android:textSize="14dp" />
+	                android:textSize="14sp" />
         	</LinearLayout>
 
             <!--<TextView-->

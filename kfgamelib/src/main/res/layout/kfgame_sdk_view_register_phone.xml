@@ -31,7 +31,7 @@
             <EditText
                 android:id="@+id/edt_phone_account"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="30dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="请输入手机号码"
@@ -61,7 +61,7 @@
             <EditText
                 android:id="@+id/edt_identifying_code"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="30dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:hint="请输入验证码"
@@ -77,7 +77,7 @@
             <TextView
                 android:id="@+id/tv_send_identifying_code"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:background="@drawable/kfgame_yanzhenma_color_round"
                 android:layout_marginRight="3dp"
                 android:paddingLeft="3dp"
@@ -107,7 +107,7 @@
             <EditText
                 android:id="@+id/edt_password"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
@@ -122,8 +122,8 @@
 
             <ImageView
                 android:id="@+id/iv_password_visible"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:src="@drawable/kfgame_password_invisible" />
@@ -132,7 +132,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
@@ -159,10 +159,9 @@
         <com.kfgame.sdk.view.SdkTipsTextView
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@drawable/kfgame_selector_btn_orange_round"
             android:gravity="center"
-            android:padding="8dp"
             android:text="注册"
             android:textColor="@android:color/white"
             android:textSize="16dp" />

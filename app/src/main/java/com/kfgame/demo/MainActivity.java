@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.callback.SDKLoginListener;
@@ -29,22 +30,26 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onLoginSuccess(KFGameUser user) {
                         Log.e("Tobin","MainActivity onLoginSuccess" + " Token:" + user.getToken() + " Uid" + user.getUid());
+                        Toast.makeText(MainActivity.this,"游戏内弹出登陆成功",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onLogoutSuccess() {
                         Log.e("Tobin","MainActivity onLogoutSuccess");
+                        Toast.makeText(MainActivity.this,"游戏内弹出登出成功",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onLoginCancel() {
                         Log.e("Tobin","MainActivityonLoginCancel");
+                        Toast.makeText(MainActivity.this,"游戏内弹出取消",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onLoginFail(String msg) {
                         if (msg != null)
                             Log.e("Tobin","MainActivity onLoginFail" + msg);
+                        Toast.makeText(MainActivity.this,"游戏内弹出登陆失败",Toast.LENGTH_SHORT).show();
 
                     }
                 });

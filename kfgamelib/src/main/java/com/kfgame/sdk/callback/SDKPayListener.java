@@ -9,5 +9,5 @@ public interface SDKPayListener {
 
     void onPayCancel();
 
-    void onPayError();
+    void onPayFail();
 }

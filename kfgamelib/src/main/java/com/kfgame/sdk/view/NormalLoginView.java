@@ -7,7 +7,9 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.common.Config;
@@ -16,13 +18,24 @@ import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.util.SPUtils;
+import com.kfgame.sdk.view.adapter.MyAdapter;
 import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
+import com.kfgame.sdk.view.widget.CustomPopWindow;
+import com.kfgame.sdk.view.widget.MaxListView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NormalLoginView extends BaseLinearLayout {
 
     private String spUserName;
     private boolean isAutoLogin;
     private String spPassWord;
+
+	private CustomPopWindow mListPopWindow;
+
 	public NormalLoginView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 	}
@@ -38,9 +51,53 @@ public class NormalLoginView extends BaseLinearLayout {
 	private EditText edt_account;
 	private EditText edt_password;
 	private SdkTipsTextView accountLogin;
+    private ImageView iv_username_dropdown;
+    private WarningLinearLayout account_layout;
 
-	@Override
+    private void showPopListView(){
+        View contentView = LayoutInflater.from(getContext()).inflate(ResourceUtil.getLayoutId("kfgame_sdk_view_pop_listview"),null);
+
+        //处理popWindow 显示内容
+        handleListView(contentView);
+        //创建并显示popWindow
+        mListPopWindow= new CustomPopWindow.PopupWindowBuilder(getContext())
+                .setView(contentView)
+                .size(account_layout.getWidth(),ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
+                .create()
+                .showAsDropDown(account_layout,0,0);
+
+//        mListPopWindow.showAtLocation(contentView, Gravity.TOP | Gravity.START,0,0);
+    }
+
+    private void handleListView(View contentView){
+        MaxListView recyclerView = (MaxListView) contentView.findViewById(ResourceUtil.getId("lv_account"));
+        recyclerView.setListViewHeight(500);
+//        LinearLayoutManager manager = new LinearLayoutManager(context);
+//        manager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView.setLayoutManager(manager);
+        MyAdapter adapter = new MyAdapter(getContext(), mockData());
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    private List<Map<String, Object>> mockData(){
+        List<Map<String, Object>> data = new ArrayList<>();
+        for (int i=0; i<3; i++){
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", "1866597255" + i);
+            data.add(map);
+        }
+        return data;
+    }
+
+
+
+
+    @Override
 	public void initView() {
+
+        account_layout =(WarningLinearLayout) findViewById(findId("account_layout"));
+
 		edt_account = (EditText) findViewById(findId("edt_phone_account"));
 		edt_account.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
@@ -99,9 +156,9 @@ public class NormalLoginView extends BaseLinearLayout {
 
                 if (isAutoLogin){
                     spPassWord =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_KEY,"1");
-                    AccountRequest.getInstance().normalLogin(username, spPassWord);
+                    AccountRequest.getInstance().normalLogin(username, spPassWord, false);
                 }else {
-                    AccountRequest.getInstance().normalLogin(username, Encryption.md5Crypt(password));
+                    AccountRequest.getInstance().normalLogin(username, Encryption.md5Crypt(password), false);
                 }
 			}
 		});
@@ -122,6 +179,14 @@ public class NormalLoginView extends BaseLinearLayout {
 				startView(ModifyPasswordView.createView(getContext()));
 			}
 		});
+
+        iv_username_dropdown = (ImageView) findViewById(findId("iv_username_dropdown"));
+        iv_username_dropdown.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopListView();
+            }
+        });
 
         spUserName =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_USERNAME_KEY, "");
 

@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
+        android:paddingBottom="30dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="15dp" >
+        android:paddingTop="20dp" >
 
         <com.kfgame.sdk.view.WarningLinearLayout
             android:id="@+id/account_layout"
@@ -47,7 +47,7 @@
             android:id="@+id/tv_switch_account_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/kfgame_selector_btn_orange_round"
             android:gravity="center"
             android:padding="8dp"

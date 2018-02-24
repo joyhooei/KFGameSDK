@@ -49,7 +49,7 @@ public class AccountRequest {
         return ourInstance;
     }
 
-    public void normalLogin(String userName, final String passWord) {
+    public void normalLogin(String userName, final String passWord, final boolean isFastLogin) {
         Context context = KFGameSDK.getInstance().getActivity();
         TreeMap<String,String> paraMap = new TreeMap<>();
         paraMap.put("appId",Config.APP_ID);
@@ -62,7 +62,7 @@ public class AccountRequest {
 
         String signpre = "";
         PostRequest postRequest = OkGo.<KFGameResponse<KFGameUser>>post(Config.NORMAL_LOGIN);
-
+        postRequest.tag(getInstance());
         for (Map.Entry<String, String> entry: paraMap.entrySet()) {
             signpre +=entry.getKey() + "=" + entry.getValue() + "&";
             postRequest.params(entry.getKey(),entry.getValue());
@@ -77,7 +77,7 @@ public class AccountRequest {
 
         JSONObject jsons = new JSONObject(paraMap);
         postRequest.upJson(jsons);
-        postRequest.tag("normalLogin");
+
         postRequest.execute(new JsonCallback<KFGameResponse<KFGameUser>>() {
             @Override
             public void onStart(Request<KFGameResponse<KFGameUser>, ? extends Request> request) {

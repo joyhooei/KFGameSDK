@@ -2,6 +2,8 @@ package com.kfgame.sdk.util;
 
 import android.util.Log;
 
+import com.kfgame.sdk.common.Config;
+
 /**
  * 日志工具类。统一管理日志信息的显示/隐藏
  *
@@ -9,7 +11,8 @@ import android.util.Log;
  */
 public class LogUtil {
     /** 日志输出时的TAG */
-    private static String mTag = "LogUtil";
+//    private static String mTag = "LogUtil";
+    private static String mTag = Config.sdkTitle + Config.SDK_VERSION;
 
     /**
      * 是否已经显示佛祖

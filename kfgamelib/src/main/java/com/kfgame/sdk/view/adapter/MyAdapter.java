@@ -9,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kfgame.sdk.KFGameSDK;
+import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.jar.Attributes;
 
 /**
  * Created by Tobin on 18/2/23.
@@ -74,7 +77,8 @@ public class MyAdapter extends BaseAdapter {
         listItemView.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                LogUtil.e("Tobin name: " + listItems.get(position).get("name").toString());
+                KFGameSDK.getInstance().getDbHelper().delete(listItems.get(position).get("name").toString());
                 listItems.remove(position);
                 notifyDataSetChanged();
             }
@@ -83,11 +87,22 @@ public class MyAdapter extends BaseAdapter {
         listItemView.info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "这是第" + (selectID + 1) + "条item", Toast.LENGTH_SHORT).show();
+                String uesername = listItems.get(position).get("name").toString();
+//                Toast.makeText(context, "这是第" + (selectID + 1) + "条item" + uesername, Toast.LENGTH_SHORT).show();
+                accountListListener.didSelectItem(uesername);
             }
         });
 
         return convertView;
+    }
+
+    private AccountListListener accountListListener;
+    public AccountListListener getAccountListListener() {
+        return accountListListener;
+    }
+
+    public void setAccountListListener(AccountListListener accountListListener) {
+        this.accountListListener = accountListListener;
     }
 
 }

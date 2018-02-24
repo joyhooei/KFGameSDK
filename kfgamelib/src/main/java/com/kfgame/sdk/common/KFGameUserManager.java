@@ -16,6 +16,19 @@ public class KFGameUserManager {
 
     private SharedPreferences accountSP;
 
+    private KFGameUser currentUser;
+
+    public KFGameUser getCurrentUser() {
+        return currentUser;
+    }
+
+    public String getCurrentUserId() {
+        return accountSP.getString("currentUser", null);
+    }
+
+    public void setCurrentUser(KFGameUser currentUser) {
+        this.currentUser = currentUser;
+    }
 
     /**
      * 保存一个登录账号

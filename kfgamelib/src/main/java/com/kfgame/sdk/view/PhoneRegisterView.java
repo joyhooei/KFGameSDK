@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kfgame.sdk.common.Encryption;
 import com.kfgame.sdk.dialog.SDKWebViewDialog;
 import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.ResourceUtil;
@@ -102,7 +103,7 @@ public class PhoneRegisterView extends BaseLinearLayout {
 					return;
 				}
                 setHttpCallback();
-				AccountRequest.getInstance().phoneRegister(phoneAccount, password , verificationCode);
+				AccountRequest.getInstance().phoneRegister(phoneAccount, Encryption.md5Crypt(password) , verificationCode);
 			}
 		});
 

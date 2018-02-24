@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.kfgame.sdk.callback.SDKLoginListener;
 import com.kfgame.sdk.common.Config;
+import com.kfgame.sdk.database.DBHelper;
 import com.kfgame.sdk.dialog.AccountDialog;
 import com.kfgame.sdk.request.SDKInit;
 import com.kfgame.sdk.util.LogUtil;
@@ -78,6 +79,7 @@ public class KFGameSDK {
         this.sdkLoginListener = sdkLoginListener;
     }
 
+    private DBHelper dbHelper;
     public void initSDK(Activity activity,String APP_ID, String CHANNEL_ID){
         this.activity = activity;
         Config.APP_ID = APP_ID;
@@ -93,6 +95,16 @@ public class KFGameSDK {
             }
         });
         Config.isAotuLogin = (Boolean) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, false);
+
+        dbHelper = new DBHelper(activity);
+    }
+
+    public DBHelper getDbHelper(){
+        if (dbHelper != null){
+            return dbHelper;
+        }else {
+            return new DBHelper(activity);
+        }
     }
 
     public void initSDK(Application application){
@@ -189,7 +201,7 @@ public class KFGameSDK {
     }
 
     public void onDestroy() {
-
+        dbHelper.cleanup();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

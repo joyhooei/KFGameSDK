@@ -14,12 +14,12 @@ import android.widget.ImageView;
 import com.kfgame.sdk.KFGameSDK;
 import com.kfgame.sdk.common.Config;
 import com.kfgame.sdk.common.Encryption;
-import com.kfgame.sdk.database.DBHelper;
 import com.kfgame.sdk.request.AccountRequest;
 import com.kfgame.sdk.util.DensityUtils;
 import com.kfgame.sdk.util.LogUtil;
 import com.kfgame.sdk.util.ResourceUtil;
 import com.kfgame.sdk.util.SPUtils;
+import com.kfgame.sdk.view.adapter.AccountListListener;
 import com.kfgame.sdk.view.adapter.MyAdapter;
 import com.kfgame.sdk.view.viewinterface.BaseOnClickListener;
 import com.kfgame.sdk.view.widget.CustomPopWindow;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NormalLoginView extends BaseLinearLayout {
+public class NormalLoginView extends BaseLinearLayout implements AccountListListener {
 
     private String spUserName;
     private boolean isAutoLogin;
@@ -42,7 +42,9 @@ public class NormalLoginView extends BaseLinearLayout {
     private ImageView iv_username_dropdown;
     private WarningLinearLayout account_layout;
 
-    private DBHelper dbHelper;
+    private CustomPopWindow mListPopWindow;
+
+    MyAdapter adapter;
 
 	public NormalLoginView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
@@ -62,7 +64,7 @@ public class NormalLoginView extends BaseLinearLayout {
         //处理popWindow 显示内容
         handleListView(contentView);
         //创建并显示popWindow
-        new CustomPopWindow.PopupWindowBuilder(getContext())
+        mListPopWindow = new CustomPopWindow.PopupWindowBuilder(getContext())
                 .setView(contentView)
                 .size(account_layout.getWidth(),ViewGroup.LayoutParams.WRAP_CONTENT)//显示大小
                 .create()
@@ -72,25 +74,25 @@ public class NormalLoginView extends BaseLinearLayout {
     private void handleListView(View contentView){
         MaxListView listView = (MaxListView) contentView.findViewById(ResourceUtil.getId("lv_account"));
         listView.setListViewHeight(DensityUtils.dp2px(getContext(),150));
-        MyAdapter adapter = new MyAdapter(getContext(), mockData());
+        adapter = new MyAdapter(getContext(), mockData());
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        adapter.setAccountListListener(this);
     }
 
     private List<Map<String, Object>> mockData(){
+
+
+        String[] usernames = KFGameSDK.getInstance().getDbHelper().queryAllUserName();
+
         List<Map<String, Object>> data = new ArrayList<>();
-        for (int i=0; i<3; i++){
+        for (int i=0; i<usernames.length; i++){
             Map<String, Object> map = new HashMap<>();
-            map.put("name", "1866597255" + i);
+            map.put("name", usernames[i]);
             data.add(map);
         }
         return data;
-    }
-
-
-    private void initLoginUserName() {
-        String[] usernames = dbHelper.queryAllUserName();
-
     }
 
 
@@ -106,6 +108,7 @@ public class NormalLoginView extends BaseLinearLayout {
 				String str = edt_account.getText().toString().trim();
 				if (isShown() && !hasFocus) {
 					checkAccount(str);
+                    isAutoLogin = false;
 				}
 			}
 		});
@@ -113,9 +116,10 @@ public class NormalLoginView extends BaseLinearLayout {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				String str = edt_account.getText().toString().trim();
-				if (Config.isAotuLogin && !spUserName.equals(str)) {
-					Config.isAotuLogin = false;
-					edt_password.setText("");
+
+				if (!spUserName.equals(str)) {
+                    isAutoLogin = false;
+                    edt_password.setText("");
 				}
 			}
 
@@ -157,8 +161,10 @@ public class NormalLoginView extends BaseLinearLayout {
 
                 if (isAutoLogin){
                     spPassWord =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_KEY,"1");
+                    LogUtil.e("Tobin 自动登陆 spPassWord:" + spPassWord);
                     AccountRequest.getInstance().normalLogin(username, spPassWord, false);
                 }else {
+                    LogUtil.e("Tobin 不是自动登陆 password:" + password);
                     AccountRequest.getInstance().normalLogin(username, Encryption.md5Crypt(password), false);
                 }
 			}
@@ -192,7 +198,7 @@ public class NormalLoginView extends BaseLinearLayout {
         spUserName =(String) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_USERNAME_KEY, "");
         isAutoLogin = (Boolean) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_ISAUTO_KEY, false);
 
-        int length =(int) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, 6);
+        int length =(int) SPUtils.get(KFGameSDK.getInstance().getActivity(),SPUtils.LOGIN_PASSWORD_LENGTH_KEY, 8);
         String lengthStr = "";
         for (int i = 0; i < length;  i++){
             lengthStr += "*";
@@ -251,4 +257,14 @@ public class NormalLoginView extends BaseLinearLayout {
 	public String getViewTitle() {
 		return "手机登陆";
 	}
+
+    @Override
+    public void didSelectItem(String userName) {
+        spPassWord = KFGameSDK.getInstance().getDbHelper().queryPasswordByName(userName);
+        LogUtil.e("Tobin NormalLoginView userName: " + userName + " spPassWord: " + spPassWord);
+        edt_account.setText(userName);
+        edt_password.setText("********");
+        isAutoLogin = true;
+        mListPopWindow.dissmiss();
+    }
 }

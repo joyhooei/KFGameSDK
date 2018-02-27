@@ -27,8 +27,7 @@ public class Config {
     public static String CHANNEL_ID = "1";
     public static String APP_ID = "1";
 
-    public static String URL_BASE_V1 = "http://192.168.1.88:8082/v1/";
-    public static String URL_BASE_V2 = "http://192.168.1.88:8081/v2/";
+    public static String URL_BASE_V1 = "http://120.25.243.133:8082/v1/";
 
     public static String URL_SDK_INIT = URL_BASE_V1 + "basic/init";
     public static String SEND_IDENTIFY_CODE = URL_BASE_V1 + "account/sendSmsCode";

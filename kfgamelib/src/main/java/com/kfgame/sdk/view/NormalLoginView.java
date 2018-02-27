@@ -83,7 +83,6 @@ public class NormalLoginView extends BaseLinearLayout implements AccountListList
 
     private List<Map<String, Object>> mockData(){
 
-
         String[] usernames = KFGameSDK.getInstance().getDbHelper().queryAllUserName();
 
         List<Map<String, Object>> data = new ArrayList<>();
@@ -191,7 +190,8 @@ public class NormalLoginView extends BaseLinearLayout implements AccountListList
         iv_username_dropdown.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopListView();
+				if (mockData().size() > 0)
+                	showPopListView();
             }
         });
 

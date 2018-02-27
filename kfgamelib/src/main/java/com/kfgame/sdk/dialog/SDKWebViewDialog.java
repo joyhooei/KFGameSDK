@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -49,6 +50,18 @@ public class SDKWebViewDialog extends Dialog {
 		webView = (WebView) rootView.findViewById(ResourceUtil.getId("webview"));
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.getSettings().setDomStorageEnabled(true);
+
+
+		// 设置可以支持缩放
+		webView.getSettings().setSupportZoom(true);
+		// 设置出现缩放工具
+		webView.getSettings().setBuiltInZoomControls(true);
+		// 扩大比例的缩放
+		webView.getSettings().setUseWideViewPort(true);
+		// 自适应屏幕
+		webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+		webView.getSettings().setLoadWithOverviewMode(true);
+
 		webView.setVerticalScrollBarEnabled(false);
 		webView.setHorizontalScrollBarEnabled(false);
 
